@@ -1,0 +1,10 @@
+.property-editor-container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+
+  .canvas-container {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,30 @@
+.container {
+  max-width: 1270px;
+  margin: 0 auto;
+  color: white;
+  background-color: inherit;
+  padding: 50px 0;
+
+  .property-panel {
+    color: white;
+    background-color: var(--bgCard);
+
+    .mat-expansion-panel-header {
+      padding: 18px 24px;
+      height: auto;
+
+      .mat-expansion-panel-header-title {
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        flex-basis: 0;
+      }
+      .mat-expansion-panel-header-description {
+        color: var(--gray);
+        justify-content: space-between;
+        align-items: center;
+        flex-basis: 0;
+      }
+    }
+  }
+}
