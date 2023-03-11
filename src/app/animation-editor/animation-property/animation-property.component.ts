@@ -11,6 +11,7 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
   private canvas: any;
   public canvasId: string = 'canvas-container-' + Math.round(Math.random() * 1000);
   private beziers: Bezier[] = [];
+  private inFocus: boolean = false;
 
   constructor() { }
 
@@ -124,8 +125,8 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
         drawCurve();
       };
 
-      s.mouseReleased = () => {
-        if (!mouseInPoint) {
+      s.mouseClicked = () => {
+        if (!mouseInPoint && this.inFocus) {
           let i = this.mouseToBezier(mouse);
           if (i < 0) return;
           const b = this.beziers[i];
@@ -152,5 +153,9 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
       if (p) return i
     }
     return -1;
+  }
+
+  public setFocus(event: boolean) {
+    this.inFocus = event;
   }
 }
