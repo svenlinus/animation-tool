@@ -1,32 +1,22 @@
 <div class="container">
+  <button mat-button class="create-button" (click)="addTimeMap()">
+    <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+    Create Time Graph
+  </button>
   <mat-accordion>
-    <mat-expansion-panel class="property-panel">
+    <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel">
       <mat-expansion-panel-header class="panel-header">
-        <mat-panel-title>Scale</mat-panel-title>
-        <mat-panel-description>Strectch and compression</mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-animation-property></app-animation-property>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="property-panel">
-      <mat-expansion-panel-header class="panel-header">
-        <mat-panel-title>Translate</mat-panel-title>
-        <mat-panel-description>Offset positon</mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-animation-property></app-animation-property>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="property-panel">
-      <mat-expansion-panel-header class="panel-header">
-        <mat-panel-title>Rotate</mat-panel-title>
-        <mat-panel-description>Offset rotation</mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-animation-property></app-animation-property>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="property-panel">
-      <mat-expansion-panel-header class="panel-header">
-        <mat-panel-title>Skew</mat-panel-title>
-        <mat-panel-description>Manipulate shape</mat-panel-description>
+        <mat-panel-title>{{tm.type + " Graph"}}</mat-panel-title>
+        <mat-panel-description class="subtitle" [innerHTML]="panelDescriptions[i]"></mat-panel-description>
       </mat-expansion-panel-header>
       <app-animation-property></app-animation-property>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
+<!-- <mat-expansion-panel class="property-panel">
+  <mat-expansion-panel-header class="panel-header">
+    <mat-panel-title>Scale</mat-panel-title>
+    <mat-panel-description>Strectch and compression</mat-panel-description>
+  </mat-expansion-panel-header>
+  <app-animation-property></app-animation-property>
+</mat-expansion-panel> -->

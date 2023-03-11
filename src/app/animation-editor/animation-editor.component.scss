@@ -5,11 +5,28 @@
   background-color: inherit;
   padding: 50px 0;
 
+  .create-button {
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: var(--bgCard);
+    border: 1px solid rgba(255, 255, 255, 0.676) !important;
+    border-radius: 10px;
+
+    .mat-icon {
+      transform: translateY(-2px);
+    }
+  }
+
   .property-panel {
+    margin-top: 20px;
     color: white;
     background-color: var(--bgCard);
 
-    .mat-expansion-panel-header {
+    .panel-header {
       padding: 18px 24px;
       height: auto;
 
@@ -19,11 +36,18 @@
         font-size: 20px;
         flex-basis: 0;
       }
-      .mat-expansion-panel-header-description {
+      .subtitle {
         color: var(--gray);
-        justify-content: space-between;
+        justify-content: flex-start;
+        // gap: 0.5ch;
         align-items: center;
         flex-basis: 0;
+
+        ::ng-deep {
+          strong {
+            color: white !important;
+          }
+        } 
       }
     }
   }
