@@ -26,6 +26,19 @@
     color: white;
     background-color: var(--bgCard);
 
+    .content {
+      display: flex;
+      flex-direction: row;
+
+      app-animation-property-editor {
+        flex-grow: 1;
+        width: 50%;
+      }
+      app-animation-graph {
+        flex-grow: 1;
+      }
+    }
+
     .panel-header {
       padding: 18px 24px;
       height: auto;

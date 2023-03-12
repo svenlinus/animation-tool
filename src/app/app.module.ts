@@ -11,15 +11,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AnimationEditorComponent } from './animation-editor/animation-editor.component';
-import { AnimationPropertyComponent } from './animation-editor/animation-property/animation-property.component';
+import { AnimationGraphComponent } from './animation-editor/animation-graph/animation-graph.component';
 import { DemoComponent } from './demo/demo.component';
+import { AnimationPropertyEditorComponent } from './animation-editor/animation-property-editor/animation-property-editor.component';
+import { AnimationPropertyComponent } from './animation-editor/animation-property-editor/animation-property/animation-property.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AnimationEditorComponent,
-    AnimationPropertyComponent,
-    DemoComponent
+    AnimationGraphComponent,
+    DemoComponent,
+    AnimationPropertyEditorComponent,
+    AnimationPropertyComponent
   ],
   imports: [
     BrowserModule,

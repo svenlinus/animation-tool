@@ -14,7 +14,10 @@
         <!-- <mat-panel-title>{{tm.type + " Graph"}}</mat-panel-title> -->
         <mat-panel-description class="subtitle" [innerHTML]="panelDescriptions[i]"></mat-panel-description>
       </mat-expansion-panel-header>
-      <app-animation-property></app-animation-property>
+      <div class="content">
+        <app-animation-graph></app-animation-graph>
+        <app-animation-property-editor [properties]="tm.properties"></app-animation-property-editor>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

@@ -3,11 +3,11 @@ import * as p5 from 'p5';
 import { Point, Bezier } from '../geometry';
 
 @Component({
-  selector: 'app-animation-property',
-  templateUrl: './animation-property.component.html',
-  styleUrls: ['./animation-property.component.scss']
+  selector: 'app-animation-graph',
+  templateUrl: './animation-graph.component.html',
+  styleUrls: ['./animation-graph.component.scss']
 })
-export class AnimationPropertyComponent implements OnInit, AfterViewInit {
+export class AnimationGraphComponent implements OnInit, AfterViewInit {
   private canvas: any;
   public canvasId: string = 'canvas-container-' + Math.round(Math.random() * 1000);
   private beziers: Bezier[] = [];
@@ -33,10 +33,10 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
         // s.rectMode(s.CENTER);
         s.textAlign(s.CENTER, s.CENTER);
 
-        this.beziers = [new Bezier(new Point(100, s.height-150), 
+        this.beziers = [new Bezier(new Point(60, s.height-150), 
           new Point(s.width*0.25, s.height*0.5),
           new Point(s.width*0.75, s.height*0.5),
-          new Point(s.width-100, 150))];
+          new Point(s.width-60, 150))];
         mouse = new Point(0, 0);
       };
 

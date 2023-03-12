@@ -1,9 +1,8 @@
-.property-editor-container {
-  display: flex;
-  flex-direction: row;
+.graph-container {
   margin: 10px 0;
 
   .canvas-container {
+    max-width: 500px;
     border-radius: 20px;
     overflow: hidden;
   }

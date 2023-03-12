@@ -26,7 +26,7 @@ export class Point {
   public reflection?: Point;
   public parent?: Point;
 
-  constructor(public x: number, public y: number) {
+  constructor(public x: number, public y: number) {     // automatically instantiates x and y as public instance vars
   }
   public set(x: number, y: number) {
     this.x = x;
