@@ -7,7 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+
 import { AnimationEditorComponent } from './animation-editor/animation-editor.component';
 import { AnimationPropertyComponent } from './animation-editor/animation-property/animation-property.component';
 import { DemoComponent } from './demo/demo.component';
@@ -25,7 +27,8 @@ import { DemoComponent } from './demo/demo.component';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

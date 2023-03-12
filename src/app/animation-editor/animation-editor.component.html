@@ -4,19 +4,17 @@
     Create Time Graph
   </button>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel">
+    <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel" [disabled]="selectingType">
       <mat-expansion-panel-header class="panel-header">
-        <mat-panel-title>{{tm.type + " Graph"}}</mat-panel-title>
+        <mat-panel-title>
+          <mat-select [(value)]="tm.type" class="type-select" (mouseenter)="setSelectingType(true)" (mouseleave)="setSelectingType(false)">
+            <mat-option *ngFor="let type of mapTypes" [value]="type" class="type-option">{{type}}</mat-option>
+          </mat-select>
+        </mat-panel-title>
+        <!-- <mat-panel-title>{{tm.type + " Graph"}}</mat-panel-title> -->
         <mat-panel-description class="subtitle" [innerHTML]="panelDescriptions[i]"></mat-panel-description>
       </mat-expansion-panel-header>
       <app-animation-property></app-animation-property>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
-<!-- <mat-expansion-panel class="property-panel">
-  <mat-expansion-panel-header class="panel-header">
-    <mat-panel-title>Scale</mat-panel-title>
-    <mat-panel-description>Strectch and compression</mat-panel-description>
-  </mat-expansion-panel-header>
-  <app-animation-property></app-animation-property>
-</mat-expansion-panel> -->

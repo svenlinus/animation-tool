@@ -40,7 +40,7 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
         mouse = new Point(0, 0);
       };
 
-      const drawCurve = () => {
+      const drawBezierCurve = () => {
         s.strokeWeight(2);
         s.noFill();
         s.stroke('#2f75ff');
@@ -51,13 +51,14 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
           j = Math.floor(u);
           const t = Math.round((u - j) * 1000) / 1000;
           const p = this.beziers[j].getValue(t);
+          if (p.x < pp.x) p.x = pp.x;
           s.line(p.x, p.y, pp.x, pp.y);
           pp = p;
         }
         s.line(pp.x, pp.y, this.beziers[j].points[3].x, this.beziers[j].points[3].y);
       }
 
-      const drawControlPoints = () => {
+      const drawBezierControlPoints = () => {
         s.strokeWeight(1);
         s.stroke(255, 100);
         s.noFill();
@@ -103,7 +104,7 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
         s.text('0', 20, s.height-150);
       }
 
-      const drawBoundingBox = () => {
+      const drawBezierBoundingBox = () => {
         let i = this.mouseToBezier(mouse);
         if (i >= 0) {
           const b = this.beziers[i];
@@ -118,11 +119,11 @@ export class AnimationPropertyComponent implements OnInit, AfterViewInit {
         mouse.set(s.mouseX, s.mouseY);
         s.background(bgColor);
         drawGrid();
-        drawControlPoints();
+        drawBezierControlPoints();
         if (!mouseInPoint) {
-          drawBoundingBox();
+          drawBezierBoundingBox();
         }
-        drawCurve();
+        drawBezierCurve();
       };
 
       s.mouseClicked = () => {

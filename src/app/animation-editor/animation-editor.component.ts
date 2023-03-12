@@ -15,6 +15,8 @@ import { Component, OnInit } from '@angular/core';
 export class AnimationEditorComponent implements OnInit {
   public timeMaps: Array<TimeMap> = [];
   public panelDescriptions: Array<string> = [];
+  public mapTypes: Array<TimeMapType> = Object.values(TimeMapType);
+  public selectingType: boolean = false;
   private defaultMap?: TimeMap;
   private openAnimationProperties: Array<AnimationProperty> = Object.values(AnimationProperty);
 
@@ -48,6 +50,10 @@ export class AnimationEditorComponent implements OnInit {
       description += `&nbsp;<strong>${p}</strong>`;
     }
     this.panelDescriptions[i] = description;
+  }
+
+  public setSelectingType(val: boolean) {
+    this.selectingType = val;
   }
 
   public addTimeMap() {

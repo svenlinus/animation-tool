@@ -30,16 +30,22 @@
       padding: 18px 24px;
       height: auto;
 
-      .mat-expansion-panel-header-title {
-        color: white;
-        font-weight: bold;
+      .type-select {
+        width: 200px;
+        background-color: var(--bgColor);
+        padding: 10px 15px;
         font-size: 20px;
-        flex-basis: 0;
+        font-weight: bold;
+
+        ::ng-deep {
+          .mat-select-value {
+            color: white;
+          }
+        }
       }
       .subtitle {
         color: var(--gray);
         justify-content: flex-start;
-        // gap: 0.5ch;
         align-items: center;
         flex-basis: 0;
 
