@@ -4,7 +4,7 @@
     Create Time Graph
   </button>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel" [disabled]="selectingType">
+    <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel" [disabled]="selectingType" hideToggle="">
       <mat-expansion-panel-header class="panel-header">
         <mat-panel-title>
           <mat-select [(value)]="tm.type" class="type-select" (mouseenter)="setSelectingType(true)" (mouseleave)="setSelectingType(false)">
