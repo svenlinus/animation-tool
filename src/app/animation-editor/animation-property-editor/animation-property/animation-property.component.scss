@@ -20,6 +20,17 @@
   }
 }
 
+
 .property-settings-table {
   margin:10px;
+
+  ::ng-deep {
+    .mat-form-field-flex {
+      background-color: var(--bgCard);
+      // padding-top: 0;
+    }
+    .mat-form-field-infix {
+      padding: 0.25em 0 0.75em 0;
+  }
+  }
 }
