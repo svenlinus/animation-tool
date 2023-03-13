@@ -1,11 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@angular/material/theming";
+@include mat-core();
+
+$my-primary: mat-palette($mat-blue, 800);
+$my-accent: mat-palette($mat-amber, 800);
+
+$my-theme: mat-light-theme($my-primary, $my-accent);
+
+@include angular-material-theme($my-theme);
 
 html, body { height: 100%; }
 
 body { 
   --bgCard: #3A4656;
   --bgColor: rgb(44 56 72);
-  --lightOrange: #f55a04;
+  --accent: #1976d2;
+
   --medOrange: #f53303;
   --gray: #afafaf;
   background-color: var(--bgColor);

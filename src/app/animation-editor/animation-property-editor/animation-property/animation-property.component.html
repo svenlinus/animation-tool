@@ -6,34 +6,34 @@
     <table class="property-settings-table">
 
       <tr>
-        <td>
-            Start
+        <td class="label">
+            Start at
         </td>
         <td>
-          <mat-form-field appearance="fill">
-            <input matInput type="number" (keyup)="updateStart($event)" value={{start}}>
+          <mat-form-field class="form-field number" appearance="fill">
+            <input matInput type="number" class="num-input" (keyup)="updateStart($event)" value={{start}}>
             <!-- <span matTextSuffix>{{unit}}</span> -->
           </mat-form-field>
           
         </td>
       </tr>
       <tr>
-        <td>
-          End
+        <td class="label">
+          End at
         </td>
         <td>
-          <mat-form-field appearance="fill">
-            <input matInput type="number" (keyup)="updateEnd($event)" value={{end}}>
+          <mat-form-field class="form-field number" appearance="fill">
+            <input matInput type="number" class="num-input" (keyup)="updateEnd($event)" value={{end}}>
           </mat-form-field>
         </td>
       </tr>
       <tr *ngIf="hasUnits">
-        <td>
+        <td class="label">
           Units
         </td>
         <td>
-          <mat-form-field appearance="fill" style="color:white">
-            <mat-select (selectionChange)="updateUnit($event)" value="{{unit}}" class="unitSelect">
+          <mat-form-field class="form-field select" appearance="fill" style="color:white" color="primary">
+            <mat-select (selectionChange)="updateUnit($event)" value="{{unit}}" class="unit-select">
               <mat-option *ngFor="let unitOp of getUnits()" value={{unitOp}}>{{unitOp}}</mat-option>
             </mat-select>
           </mat-form-field>

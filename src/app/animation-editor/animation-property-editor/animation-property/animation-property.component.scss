@@ -10,27 +10,51 @@
     }
   }
 
-}
 
-.unitSelect {
-  ::ng-deep {
-    .mat-select-value {
-      color: white;
+  .property-settings-table {
+    margin:10px;
+    margin-left: 20px;
+
+    .label {
+      font-size: 16px;
+    }
+
+    .form-field {
+      transform: translateY(5px);
+      margin-left: 5px;
+
+      ::ng-deep {
+        .mat-form-field-flex {
+          background-color: var(--bgCard);
+        }
+        .mat-form-field-infix {
+          border-top: 0;
+        }
+      }
+
+      &.select {
+        max-width: 80px;
+
+        .unit-select {
+  
+          ::ng-deep {
+            .mat-select-value {
+              color: white;
+            }
+            .mat-select-arrow-wrapper {
+              transform: translateY(0px);
+            }
+            .mat-form-field-underline {
+              background-color: var(--accent) !important;
+            }
+          }
+        }
+      }
+
+      &.number {
+        max-width: 80px;
+      }
     }
   }
-}
 
-
-.property-settings-table {
-  margin:10px;
-
-  ::ng-deep {
-    .mat-form-field-flex {
-      background-color: var(--bgCard);
-      // padding-top: 0;
-    }
-    .mat-form-field-infix {
-      padding: 0.25em 0 0.75em 0;
-  }
-  }
 }
