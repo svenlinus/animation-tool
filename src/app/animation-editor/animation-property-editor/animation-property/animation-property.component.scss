@@ -9,4 +9,17 @@
       margin: 0;
     }
   }
+
+}
+
+.unitSelect {
+  ::ng-deep {
+    .mat-select-value {
+      color: white;
+    }
+  }
+}
+
+.property-settings-table {
+  margin:10px;
 }

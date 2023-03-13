@@ -2,4 +2,43 @@
   <div class="header">
     <h1>{{property}}</h1>
   </div>
+  <div>
+    <table class="property-settings-table">
+
+      <tr>
+        <td>
+            Start
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput type="number" (keyup)="updateStart($event)" value={{start}}>
+          </mat-form-field>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          End
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput type="number" (keyup)="updateEnd($event)" value={{end}}>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr *ngIf="hasUnits">
+        <td>
+          Units
+        </td>
+        <td>
+          <mat-form-field appearance="fill" style="color:white">
+            <mat-select (selectionChange)="updateUnit($event)" value="{{unit}}" class="unitSelect">
+              <mat-option *ngFor="let unitOp of getUnits()" value={{unitOp}}>{{unitOp}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 </div>
