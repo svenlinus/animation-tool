@@ -39,7 +39,7 @@ export class Point {
   }
   public track(v: Point, w: number, h: number) {
     const x = v.x < -w ? -w : (v.x > 1+w ? 1+w : v.x);
-    const y = v.y < -w ? -w : (v.y > 1+h ? 1+h : v.y);
+    const y = v.y < -h ? -h : (v.y > 1+h ? 1+h : v.y);
     const p = this.copy();
     this.set(x, y)
     if (this.children) {
