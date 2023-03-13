@@ -1,3 +1,7 @@
 <div class="graph-container">
-  <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="setFocus(false)"></div>
+  <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="onMouseLeave()"></div>
+  <button mat-button class="create-button" (click)="sample()">
+    <mat-icon>segment</mat-icon>
+    Create Keyframes
+  </button>
 </div>

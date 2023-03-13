@@ -1,4 +1,4 @@
-import { AnimationProperty, TimeMapType, TimeMap } from './animation.model';
+import { AnimationProperty, TimeMapType, TimeMap, PercentFrame } from './animation.model';
 import { Point } from "./geometry"
 import { Component, OnInit } from '@angular/core';
 
@@ -37,7 +37,10 @@ export class AnimationEditorComponent implements OnInit {
       this.defaultMap = {
         properties: props,
         type: TimeMapType.Bezier,
-        points: [new Point(0, 0), new Point(1, 1)]
+        bezierPoints: [new Point(0, 0), 
+          new Point(0.2, 0.5),
+          new Point(0.8, 0.5),
+          new Point(1, 1)]
       }
     }
   }
@@ -60,5 +63,9 @@ export class AnimationEditorComponent implements OnInit {
     this.createDefaultMap();
     if (this.defaultMap) this.timeMaps.push(this.defaultMap);
     this.createPanelDescription(this.panelDescriptions.length);
+  }
+
+  public onFramesChanged(frames: Array<PercentFrame>) {
+    // console.warn(frames);
   }
 }

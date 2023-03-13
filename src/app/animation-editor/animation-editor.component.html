@@ -1,6 +1,6 @@
 <div class="container">
   <button mat-button class="create-button" (click)="addTimeMap()">
-    <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+    <mat-icon aria-hidden="false" aria-label="Add">add</mat-icon>
     Create Time Graph
   </button>
   <mat-accordion>
@@ -15,7 +15,7 @@
         <mat-panel-description class="subtitle" [innerHTML]="panelDescriptions[i]"></mat-panel-description>
       </mat-expansion-panel-header>
       <div class="content">
-        <app-animation-graph></app-animation-graph>
+        <app-animation-graph [type]="tm.type" [(points)]="tm.bezierPoints" (framesChange)="onFramesChanged($event)"></app-animation-graph>
         <app-animation-property-editor [properties]="tm.properties"></app-animation-property-editor>
       </div>
     </mat-expansion-panel>

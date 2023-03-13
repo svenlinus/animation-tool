@@ -3,8 +3,8 @@ export class Bezier {
   public mid: Point;
   public min?: Point;
   public max?: Point;
-  constructor(a: Point, b: Point, c: Point, d: Point) {
-    this.points = [a, b, c, d];
+  constructor(points: Array<Point>) {
+    this.points = points;
     this.mid = Point.add(this.points[0], this.points[3]).div(2);
   }
   public getValue(t: number): Point {
@@ -12,7 +12,10 @@ export class Bezier {
     const y = (Math.pow(1-t, 3) * this.points[0].y) + (3 * Math.pow(1-t, 2) * t * this.points[1].y) + (3 * (1-t) * t*t * this.points[2].y) + (t*t*t * this.points[3].y);
     return new Point(x, y);
   }
-  public mouseToPoint(mouse: Point): any {
+  // public getY(t: number): number {
+  //   return (Math.pow(1-t, 3) * this.points[0].y) + (3 * Math.pow(1-t, 2) * t * this.points[1].y) + (3 * (1-t) * t*t * this.points[2].y) + (t*t*t * this.points[3].y);
+  // }
+  public mouseIn(mouse: Point): any {
     this.max = Point.max(this.points);
     this.min = Point.min(this.points);
     this.mid = Point.add(this.max, this.min).div(2);
@@ -25,16 +28,18 @@ export class Point {
   public children?: Point[];
   public reflection?: Point;
   public parent?: Point;
+  public isLast?: boolean;
 
   constructor(public x: number, public y: number) {     // automatically instantiates x and y as public instance vars
   }
   public set(x: number, y: number) {
-    this.x = x;
+    this.x = !this.isLast ? x : 1;
     this.y = y;
+    return this;
   }
   public track(v: Point, w: number, h: number) {
-    const x = v.x < 0 ? 0 : (v.x > w ? w : v.x);
-    const y = v.y < 0 ? 0 : (v.y > h ? h : v.y);
+    const x = v.x < -w ? -w : (v.x > 1+w ? 1+w : v.x);
+    const y = v.y < -w ? -w : (v.y > 1+h ? 1+h : v.y);
     const p = this.copy();
     this.set(x, y)
     if (this.children) {
@@ -49,8 +54,14 @@ export class Point {
       this.reflection.set(np.x, np.y);
     }
   }
+  public worldToScreen(zoom: Point, offset: Point): Point {
+    return new Point(this.x * zoom.x + offset.x, (1-this.y) * zoom.y + offset.y);
+  }
+  public screenToWorld(zoom: Point, offset: Point): Point {
+    return new Point((this.x - offset.x) / zoom.x, 1-((this.y - offset.y) / zoom.y));
+  }
   public mouseIn(mouse: Point) {
-    return Point.sub(this, mouse).magSq() < 100;
+    return Point.sub(this, mouse).magSq() < 0.0025;
   }
   public static sub(a: Point, b: Point) {
     return new Point(a.x-b.x, a.y-b.y)
@@ -63,6 +74,11 @@ export class Point {
   }
   public add(v: Point): Point {
     this.set(this.x + v.x, this.y + v.y);
+    return this;
+  }
+  public mult(num: number): Point {
+    this.x = this.x * num;
+    this.y = this.y * num;
     return this;
   }
   public div(num: number): Point {

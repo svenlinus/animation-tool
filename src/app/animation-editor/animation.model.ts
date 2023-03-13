@@ -3,7 +3,13 @@ import { Point } from "./geometry"
 export interface TimeMap {
   type: TimeMapType,
   properties: Array<AnimationProperty>,
-  points?: Array<Point>
+  bezierPoints?: Array<Point>,
+  frames?: Array<PercentFrame>
+}
+
+export interface PercentFrame {
+  percent: number,
+  value: number
 }
 
 export enum TimeMapType {
