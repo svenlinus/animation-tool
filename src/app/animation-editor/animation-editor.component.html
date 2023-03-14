@@ -7,6 +7,12 @@
     <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel" [disabled]="selectingType" hideToggle="">
       <mat-expansion-panel-header class="panel-header">
         <mat-panel-title>
+          <div class="graph-icon">
+            <mat-icon *ngIf="tm.type == 'Bezier' || tm.type == 'Polynomial'" style="color: white;">insights</mat-icon>
+            <mat-icon *ngIf="tm.type == 'Spring'" style="color: white;">expand</mat-icon>
+            <mat-icon *ngIf="tm.type == 'Linear'" style="color: white;">timeline</mat-icon>
+            <mat-icon *ngIf="tm.type == 'Custom'" style="color: white;">code</mat-icon>
+          </div>
           <mat-select [(value)]="tm.type" class="type-select" (mouseenter)="setSelectingType(true)" (mouseleave)="setSelectingType(false)">
             <mat-option *ngFor="let type of mapTypes" [value]="type" class="type-option">{{type}}</mat-option>
           </mat-select>
