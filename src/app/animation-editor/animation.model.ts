@@ -4,7 +4,7 @@ export interface TimeMap {
   type: TimeMapType,
   properties: Array<AnimationProperty>,
   bezierPoints?: Array<Point>,
-  frames?: Array<PercentFrame>
+  frames: Array<PercentFrame>
 }
 
 export interface PercentFrame {

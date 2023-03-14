@@ -1,6 +1,6 @@
 import { AnimationProperty, TimeMapType, TimeMap, PercentFrame } from './animation.model';
 import { Point } from "./geometry"
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-animation-editor',
@@ -17,7 +17,14 @@ export class AnimationEditorComponent implements OnInit {
   public panelDescriptions: Array<string> = [];
   public mapTypes: Array<TimeMapType> = Object.values(TimeMapType);
   public selectingType: boolean = false;
-  private defaultMap?: TimeMap;
+  public numFrames: number = 40;
+
+  // private animationContainerRef?: ElementRef;
+  @ViewChild('animationContainer') animationContainerRef!: ElementRef;
+
+  private percentFrames: Array<PercentFrame> = [];
+  private cssFrames: string = '';
+  private defaultMap!: TimeMap;
   private openAnimationProperties: Array<AnimationProperty> = Object.values(AnimationProperty);
 
   constructor() {
@@ -37,6 +44,7 @@ export class AnimationEditorComponent implements OnInit {
       this.defaultMap = {
         properties: props,
         type: TimeMapType.Bezier,
+        frames: [],
         bezierPoints: [new Point(0, 0), 
           new Point(0.2, 0.5),
           new Point(0.8, 0.5),
@@ -61,11 +69,32 @@ export class AnimationEditorComponent implements OnInit {
 
   public addTimeMap() {
     this.createDefaultMap();
-    if (this.defaultMap) this.timeMaps.push(this.defaultMap);
+    this.timeMaps.push(this.defaultMap);
     this.createPanelDescription(this.panelDescriptions.length);
   }
 
-  public onFramesChanged(frames: Array<PercentFrame>) {
-    // console.warn(frames);
+  public onFramesChanged(frames: Array<PercentFrame>, timeMap: TimeMap) {
+    timeMap.frames = frames;
+    console.warn(frames);
+    this.generateCssFrames();
+  }
+
+  private generateCssFrames() {
+    this.cssFrames = '@keyframes anim {\n'
+    for (let i = 0; i < this.timeMaps[0].frames.length; i++) {
+      for (let tm of this.timeMaps) {
+        const val = Math.round(tm.frames[i].value * 10000) / 10000 * 0.5;
+        this.cssFrames += `${(i+1)/this.numFrames * 100}% { transform: scale(${1 + val}, ${1 - val}) }\n`
+        // for (let p of tm.properties) {
+        //   const prefix = p != AnimationProperty.Color ? 'transform: ' : '';
+        //   this.cssFrames += `${prefix} scale`;
+        // }
+      }
+    }
+    this.cssFrames += '}'
+    this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + '</style>';
+    // console.warn(this.animationContainerRef.nativeElement);
+
+    console.warn(this.cssFrames);
   }
 }
