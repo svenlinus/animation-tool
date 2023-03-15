@@ -1,4 +1,4 @@
-import { BezierSpline, LinearSpline, Spline, SpringLine, PolynomialSpline, CustomGraph } from './../curve.model';
+import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph } from './../curve.model';
 import { PercentFrame, TimeMapType } from './../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as p5 from 'p5';
@@ -12,7 +12,7 @@ import { Point, Bezier } from '../geometry';
 export class AnimationGraphComponent implements OnInit, AfterViewInit {
   @Input() public points?: Array<Point>;
   private _type!: TimeMapType;
-  private curve!: Spline;
+  public curve!: Graph;
   private refresh = false;
   @Input() set type(val: TimeMapType) {
     this._type = val;
@@ -22,7 +22,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         this.curve = new BezierSpline(this);
         break;
       case TimeMapType.Spring:
-        this.curve = new SpringLine(this);
+        this.curve = new SpringGraph(this);
         break;
       case TimeMapType.Linear:
         this.curve = new LinearSpline(this);
@@ -47,6 +47,8 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public zoom = new Point(380, 200);
   public offset = new Point(60, 150);
   public p5!: p5;
+  public mouseUp: boolean = false;
+  public keys: Array<boolean> = [];
   
   private canvas: any;
   private frames: Array<PercentFrame> = []
@@ -67,8 +69,10 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
       s.setup = () => {
         this.refresh = false;
         this.curve.setup();
+        let canvas2 = s.createCanvas(500, 500);
+        canvas2.parent(this.canvasId);
+        document.getElementById(this.canvasId)?.addEventListener('contextmenu', e => e.preventDefault());
         s.background(this.bgColor);
-        s.textAlign(s.CENTER, s.CENTER);
         this.mouse = new Point(0, 0);
       };
 
@@ -78,16 +82,27 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         this.mouse.set(s.mouseX, s.mouseY);
         this.mouse = this.mouse.screenToWorld(this.zoom, this.offset);
         s.background(this.bgColor);
+        s.textAlign(s.CENTER, s.CENTER);
         drawGrid();
         this.curve.draw();
         drawFrames();
+        this.mouseUp = false;
       };
 
       s.mouseClicked = () => {
-        if (!this.mouseInPoint && this.inFocus) {
-          this.curve.add();
+        this.mouseUp = true;
+        if (!this.mouseInPoint && this.inFocus && (this.curve as Spline).add) {
+          (this.curve as Spline).add();
         }
       };
+
+      s.keyPressed = () => {
+        this.keys[s.keyCode] = true;
+      }
+
+      s.keyReleased = () => {
+        this.keys[s.keyCode] = false;
+      }
 
       const drawFrames = () => {
         for (let frame of this.frames) {

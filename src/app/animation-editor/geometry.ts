@@ -1,3 +1,6 @@
+import { AnimationGraphComponent } from './animation-graph/animation-graph.component';
+import * as p5 from "p5";
+
 export class Bezier {
   public points: Point[];
   public mid: Point;
@@ -29,6 +32,10 @@ export class Point {
   public reflection?: Point;
   public parent?: Point;
   public isLast?: boolean;
+  private separated?: boolean;
+  private contextMenuPos!: Point;
+  public showMenu?: boolean;
+  public remove?: boolean;
 
   constructor(public x: number, public y: number) {     // automatically instantiates x and y as public instance vars
   }
@@ -38,6 +45,7 @@ export class Point {
     return this;
   }
   public track(v: Point, w: number, h: number) {
+    if (this.showMenu) return;
     const x = v.x < -w ? -w : (v.x > 1+w ? 1+w : v.x);
     const y = v.y < -h ? -h : (v.y > 1+h ? 1+h : v.y);
     const p = this.copy();
@@ -49,15 +57,19 @@ export class Point {
         c.set(np.x, np.y);
       }
     }
-    if (this.reflection && this.parent) {
+    if (this.reflection && this.parent && (!this.parent || !this.parent.separated)) {
       const np = Point.sub(Point.mult(this.parent, 2), this);
       this.reflection.set(np.x, np.y);
     }
   }
-  public worldToScreen(zoom: Point, offset: Point): Point {
+  public worldToScreen(zoom?: Point, offset?: Point): Point {
+    if (!zoom) zoom = new Point(380, 200);
+    if (!offset) offset = new Point(60, 150);
     return new Point(this.x * zoom.x + offset.x, (1-this.y) * zoom.y + offset.y);
   }
-  public screenToWorld(zoom: Point, offset: Point): Point {
+  public screenToWorld(zoom?: Point, offset?: Point): Point {
+    if (!zoom) zoom = new Point(380, 200);
+    if (!offset) offset = new Point(60, 150);
     return new Point((this.x - offset.x) / zoom.x, 1-((this.y - offset.y) / zoom.y));
   }
   public mouseIn(mouse: Point) {
@@ -121,10 +133,38 @@ export class Point {
   public static lerp(a: Point, b: Point, t: number) {
     return new Point(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
   }
-  // (1-t)^3 a + 3(1-t)^2 tb + 3(1-t) t^2c + t^3 d
-  public static cubicBezier(a: Point, b: Point, c: Point, d: Point, t: number) {
-    const x = (Math.pow(1-t, 3) * a.x) + (3 * Math.pow(1-t, 2) * t * b.x) + (3 * (1-t) * t*t * c.x) + (t*t*t * d.x);
-    const y = (Math.pow(1-t, 3) * a.y) + (3 * Math.pow(1-t, 2) * t * b.y) + (3 * (1-t) * t*t * c.y) + (t*t*t * d.y);
-    return new Point(x, y);
+  public showContextMenu(s: p5, comp: AnimationGraphComponent, mouse?: Point) {
+    if (mouse) this.contextMenuPos = mouse.add(new Point(10, 10));
+    this.showMenu = true;
+
+    let c1 = 255;
+    let c2 = 255;
+    if (s.mouseX >= this.contextMenuPos.x && s.mouseX <= this.contextMenuPos.x + 90 && s.mouseY >= this.contextMenuPos.y) {
+      if (s.mouseY <= this.contextMenuPos.y + 30) {
+        c1 = 220;
+        s.cursor(s.HAND);
+        comp.mouseInPoint = true;
+        if (comp.mouseUp) this.separated = !this.separated;
+      } else if (s.mouseY <= this.contextMenuPos.y + 60) {
+        comp.mouseInPoint = true;
+        s.cursor(s.HAND);
+        c2 = 220;
+        if (comp.mouseUp) this.remove = true;;
+      }
+    }
+
+    s.noStroke();
+    s.fill(c1, 200);
+    s.rect(this.contextMenuPos.x, this.contextMenuPos.y, 90, 30);
+    s.fill(c2, 200);
+    s.rect(this.contextMenuPos.x, this.contextMenuPos.y + 30, 90, 30);
+    s.fill(0);
+    s.textSize(15);
+    s.textAlign(s.LEFT, s.TOP);
+    s.push();
+    s.translate(this.contextMenuPos.x, this.contextMenuPos.y);
+    s.text(this.separated ? 'Connect' : 'Separate', 8, 8);
+    s.text('Delete', 8, s.textAscent() + s.textDescent() + 18);
+    s.pop();
   }
 }
