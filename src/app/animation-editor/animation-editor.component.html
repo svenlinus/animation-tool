@@ -1,6 +1,6 @@
 <div class="container">
   <div #animationContainer></div>
-  <div class="demo-box" #demoBox></div>
+  <div class="demo-box" #demoBox (click)="playAnimation()"></div>
   <button mat-button class="create-button" (click)="addTimeMap()">
     <mat-icon aria-hidden="false" aria-label="Add">add</mat-icon>
     Create Time Graph

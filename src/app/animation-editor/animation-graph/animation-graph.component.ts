@@ -1,3 +1,4 @@
+import { BezierSpline, LinearSpline, Spline, SpringLine, PolynomialSpline, CustomGraph } from './../curve.model';
 import { PercentFrame, TimeMapType } from './../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as p5 from 'p5';
@@ -10,151 +11,87 @@ import { Point, Bezier } from '../geometry';
 })
 export class AnimationGraphComponent implements OnInit, AfterViewInit {
   @Input() public points?: Array<Point>;
-  @Input() public type?: TimeMapType;
+  private _type!: TimeMapType;
+  private curve!: Spline;
+  private refresh = false;
+  @Input() set type(val: TimeMapType) {
+    this._type = val;
+    this.refresh = true;
+    switch (val) {
+      case TimeMapType.Bezier:
+        this.curve = new BezierSpline(this);
+        break;
+      case TimeMapType.Spring:
+        this.curve = new SpringLine(this);
+        break;
+      case TimeMapType.Linear:
+        this.curve = new LinearSpline(this);
+        break;
+      case TimeMapType.Polynomial:
+        this.curve = new PolynomialSpline(this);
+        break;
+      default:
+        this.curve = new CustomGraph(this);
+        break;
+    }
+  };
   @Output() public pointsChange = new EventEmitter<Array<Point>>();
   @Output() public framesChange = new EventEmitter<Array<PercentFrame>>();
 
   public canvasId: string = 'canvas-container-' + Math.round(Math.random() * 1000);
+  public beziers: Bezier[] = [];
+  public mouseInPoint!: boolean;
+  public mouse!: Point;
+  public bgColor: string = 'rgb(25, 33, 42)'
+  public dragging: number = -1;
+  public zoom = new Point(380, 200);
+  public offset = new Point(60, 150);
+  public p5!: p5;
   
   private canvas: any;
-  private beziers: Bezier[] = [];
   private frames: Array<PercentFrame> = []
   private inFocus: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    let mouseInPoint: boolean;
-    let mouse: Point;
-    let bgColor:string = 'rgb(25, 33, 42)'
-    let dragging: number = -1;
 
     /*************** p5 Code (I usually collapse this if I'm not working on it) ***************/ 
-    const sketch = (s: any) => {
-      // const offset = new Point();
-      const zoom = new Point(380, 200);
-      const offset = new Point(60, 150);
+    const sketch = (s: p5) => {
+      this.p5 = s;
 
       s.setup = () => {
-        if (this.type == TimeMapType.Bezier) {
-          setUpBezierCureve();
-        }
-        s.background(bgColor);
+        this.refresh = false;
+        this.curve.setup();
+        s.background(this.bgColor);
         s.textAlign(s.CENTER, s.CENTER);
-        mouse = new Point(0, 0);
+        this.mouse = new Point(0, 0);
       };
 
       s.draw = () => {
+        if (this.refresh) s.setup();
         s.cursor(s.ARROW);
-        mouse.set(s.mouseX, s.mouseY);
-        mouse = mouse.screenToWorld(zoom, offset);
-        s.background(bgColor);
+        this.mouse.set(s.mouseX, s.mouseY);
+        this.mouse = this.mouse.screenToWorld(this.zoom, this.offset);
+        s.background(this.bgColor);
         drawGrid();
-        if (this.type == TimeMapType.Bezier) {
-          drawBezierControlPoints();
-          if (!mouseInPoint) drawBezierBoundingBox();
-          drawBezierCurve();
-        }
+        this.curve.draw();
         drawFrames();
       };
 
       s.mouseClicked = () => {
-        if (!mouseInPoint && this.inFocus) {
-          if (this.type == TimeMapType.Bezier) {
-            addBezier();
-          }
+        if (!this.mouseInPoint && this.inFocus) {
+          this.curve.add();
         }
       };
 
-      const addBezier = () => {
-        let i = this.mouseToBezier(mouse);
-        if (i < 0) return;
-        const b = this.beziers[i];
-        const newPoints = [
-          new Point(b.mid.x - 0.08, b.mid.y),
-          b.mid.copy(),
-          new Point(b.mid.x + 0.08, b.mid.y),
-        ];
-        newPoints[1].setChildren(newPoints[0], newPoints[2]);
-        newPoints[0].mirror(newPoints[2]);
-        newPoints[2].mirror(newPoints[0]);
-        this.beziers.splice(i, 0, new Bezier( [b.points[0], b.points[1], newPoints[0], newPoints[1]] ));
-        b.points.splice(0, 2, newPoints[1], newPoints[2]);
-      }
-
-      const setUpBezierCureve = () => {
-        let canvas2 = s.createCanvas(500, 500);
-        canvas2.parent(this.canvasId);
-
-        this.beziers = [new Bezier(this.points || [])];
-        this.beziers[0].points[3].isLast = true;
-      }
-
-      const drawBezierCurve = () => {
-        let isAFunction = true;
-        s.strokeWeight(2);
-        s.noFill();
-        let pp = this.beziers[0].points[0].worldToScreen(zoom, offset);
-        let j = 0;
-        for (let i = 0; i < 1; i += 0.025) {
-          s.stroke('#2f75ff');
-          const u = Math.round(i * this.beziers.length * 1000) / 1000;
-          j = Math.floor(u);
-          const t = Math.round((u - j) * 1000) / 1000;
-          const p = this.beziers[j].getValue(t).worldToScreen(zoom, offset);
-          if (p.x < pp.x) {
-            isAFunction = false;
-            s.stroke('#E55054');
-          }
-          s.line(p.x, p.y, pp.x, pp.y);
-          pp = p;
-        }
-        const lp = this.beziers[j].points[3].worldToScreen(zoom, offset);
-        s.line(pp.x, pp.y, lp.x, lp.y);
-      }
-
-      const drawBezierControlPoints = () => {
-        s.strokeWeight(1);
-        s.stroke(255, 100);
-        s.noFill();
-        mouseInPoint = false;
-        for (let j = 0; j < this.beziers.length; j ++) {
-          const bez = this.beziers[j];
-          for (let i = 0; i < bez.points.length; i ++) {    // loop through all points in all beziers
-            const point = bez.points[i];
-            const ppoint = i > 0 ? bez.points[i-1] : null;
-            if ((point.mouseIn(mouse) || point.drag) && j+i > 0) {      // handle mouse drag for all points except for first
-              if (dragging >= 0 && dragging != i) continue;
-              mouseInPoint = true;
-              s.cursor('grab');
-              if (s.mouseIsPressed) {
-                dragging = i;
-                point.drag = true;
-                point.track(mouse, 0.158, 0.75);
-              } else {
-                dragging = -1;
-                point.drag = false;
-              }
-            }
-            if (!s.mouseIsPressed && point.isLast) {                            // limit last point to 0 and 1
-              point.y = Math.round(point.y);
-            }
-            const p1 = point.worldToScreen(zoom, offset);
-            if ((i == 1 || i == bez.points.length-1) && ppoint) {
-              const p2 = ppoint.worldToScreen(zoom, offset);
-              s.line(p1.x, p1.y, p2.x, p2.y);
-            }
-            s.circle(p1.x, p1.y, 10);
-          }
-        }
-      }
-
       const drawFrames = () => {
         for (let frame of this.frames) {
-          const pos = new Point(frame.percent, frame.value).worldToScreen(zoom, offset);
+          const pos = new Point(frame.percent, frame.value).worldToScreen(this.zoom, this.offset);
           s.stroke(255, 150);
           s.strokeWeight(2);
           s.point(pos.x, pos.y);
@@ -167,25 +104,11 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         const padding = 150;  
         s.line(0, padding, s.width, padding);
         s.line(0, s.height - padding, s.width, s.height - padding);
-        // s.line(0, s.height / 2, s.width, s.height / 2);
-        // s.line(0, s.height - 80, s.width, s.height - 80);
-        s.stroke(bgColor);
+        s.stroke(this.bgColor);
         s.fill(255, 100);
         s.textSize(15);
         s.text('1', 20, 150);
         s.text('0', 20, s.height-150);
-      }
-
-      const drawBezierBoundingBox = () => {
-        let i = this.mouseToBezier(mouse);
-        if (i >= 0) {
-          const b = this.beziers[i];
-          const p1 = b.min?.worldToScreen(zoom, offset);
-          const p2 = b.max?.worldToScreen(zoom, offset);
-          s.stroke(255, 20);
-          if (p1 && p2)
-            s.rect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
-        }
       }
     };
     /*************** p5 Code ***************/ 
@@ -193,9 +116,9 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
     this.canvas = new p5(sketch);
   }
 
-  private mouseToBezier(mouse: Point): number {
+  public mouseToBezier(): number {
     for (let i = 0; i < this.beziers.length; i ++) {
-      if(this.beziers[i].mouseIn(mouse)) return i;
+      if(this.beziers[i].mouseIn(this.mouse)) return i;
     }
     return -1;
   }

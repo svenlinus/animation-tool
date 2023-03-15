@@ -21,6 +21,7 @@ export class AnimationEditorComponent implements OnInit {
 
   // private animationContainerRef?: ElementRef;
   @ViewChild('animationContainer') animationContainerRef!: ElementRef;
+  @ViewChild('demoBox') demoBoxRef!: ElementRef;
 
   private percentFrames: Array<PercentFrame> = [];
   private cssFrames: string = '';
@@ -46,8 +47,8 @@ export class AnimationEditorComponent implements OnInit {
         type: TimeMapType.Bezier,
         frames: [],
         bezierPoints: [new Point(0, 0), 
-          new Point(0.2, 0.5),
-          new Point(0.8, 0.5),
+          new Point(0.4, 0.1),
+          new Point(0.6, 0.9),
           new Point(1, 1)]
       }
     }
@@ -91,10 +92,19 @@ export class AnimationEditorComponent implements OnInit {
         // }
       }
     }
+
     this.cssFrames += '}'
     this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + '</style>';
     // console.warn(this.animationContainerRef.nativeElement);
 
     console.warn(this.cssFrames);
+    this.playAnimation();
+  }
+
+
+  public playAnimation() {
+    this.demoBoxRef.nativeElement.style = '';
+    void this.demoBoxRef.nativeElement.offsetWidth;
+    this.demoBoxRef.nativeElement.style = 'animation: anim 1s linear;';
   }
 }
