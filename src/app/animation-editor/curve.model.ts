@@ -178,11 +178,15 @@ export class BezierSpline implements Spline {
   }
 }
 
-interface SpringConfig {
-  initVelocity: number;
+export interface Dict {
+  [key: string]: any
+}
+
+export interface SpringConfig extends Dict {
   stiffness: number;
   dampener: number;
   maxVelocity: number;
+  initVelocity: number;
 }
 
 export class SpringGraph implements Graph {
@@ -200,9 +204,8 @@ export class SpringGraph implements Graph {
   constructor(private component: AnimationGraphComponent) {
   }
   public setup() {
-    this.pos = 0;
-    this.vel = this.initVelocity;
     this.generatePoints();
+    this.component.springConfig = this.getConfig();
   }
   public draw() {
     const comp = this.component;
@@ -263,6 +266,8 @@ export class SpringGraph implements Graph {
     s.endShape();
   }
   private generatePoints() {
+    this.vel = this.initVelocity;
+    this.pos = 0;
     this.points = [];
     let iter = 0;
     const exitPoint = 0.002;
@@ -283,11 +288,19 @@ export class SpringGraph implements Graph {
     this.pos += this.vel;
   }
   public setConfig(config: SpringConfig) {
-    this.initVelocity = config.initVelocity;
     this.stiffness = config.stiffness;
     this.dampener = config.dampener;
     this.maxVelocity = config.maxVelocity;
+    this.initVelocity = config.initVelocity;
     this.generatePoints();
+  }
+  public getConfig(): SpringConfig {
+    return {
+      stiffness: this.stiffness,
+      dampener: this.dampener,
+      maxVelocity: this.maxVelocity,
+      initVelocity: this.initVelocity
+    }
   }
   public sample(): PercentFrame[] {
     const comp = this.component;

@@ -1,0 +1,33 @@
+.container {
+  padding: 0;
+  width: 500px;
+  .inputs {
+    display: flex;
+    flex-wrap: wrap;
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+      gap: 5px;
+      max-width: 250px;
+
+      .content {
+        display: flex;
+        flex-grow: 1;
+
+        .label {
+          align-self: center;
+          font-size: 18px;
+          font-weight: 400;
+          margin-right: 6px;
+          margin-left: 4px;
+        }
+
+        .slider {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}

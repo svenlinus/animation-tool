@@ -1,3 +1,4 @@
+import { SpringEditorComponent } from './animation-editor/animation-graph/spring-editor/spring-editor.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -10,11 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { AnimationEditorComponent } from './animation-editor/animation-editor.component';
 import { AnimationGraphComponent } from './animation-editor/animation-graph/animation-graph.component';
-import { DemoComponent } from './demo/demo.component';
 import { AnimationPropertyEditorComponent } from './animation-editor/animation-property-editor/animation-property-editor.component';
 import { AnimationPropertyComponent } from './animation-editor/animation-property-editor/animation-property/animation-property.component';
 
@@ -24,9 +25,9 @@ import { AnimationPropertyComponent } from './animation-editor/animation-propert
     AppComponent,
     AnimationEditorComponent,
     AnimationGraphComponent,
-    DemoComponent,
     AnimationPropertyEditorComponent,
-    AnimationPropertyComponent
+    AnimationPropertyComponent,
+    SpringEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +39,7 @@ import { AnimationPropertyComponent } from './animation-editor/animation-propert
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

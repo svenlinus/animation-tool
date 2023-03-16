@@ -1,4 +1,4 @@
-import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph } from './../curve.model';
+import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph, SpringConfig } from './../curve.model';
 import { PercentFrame, TimeMapType } from './../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as p5 from 'p5';
@@ -36,6 +36,9 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         break;
     }
   };
+  get type(): TimeMapType {
+    return this._type;
+  }
   @Output() public pointsChange = new EventEmitter<Array<Point>>();
   @Output() public framesChange = new EventEmitter<Array<PercentFrame>>();
 
@@ -50,6 +53,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public p5!: p5;
   public mouseUp: boolean = false;
   public keys: Array<boolean> = [];
+  public springConfig!: SpringConfig;
   
   private canvas: any;
   private frames: Array<PercentFrame> = []
@@ -162,6 +166,11 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
       }
       this.pointsChange.emit(this.points);
     }
+  }
+
+  public updateSpringConfig(val: SpringConfig) {
+    this.springConfig = val;
+    (this.curve as SpringGraph).setConfig(val);
   }
 
   public onMouseLeave() {

@@ -105,6 +105,8 @@ export class AnimationEditorComponent implements OnInit {
   public playAnimation() {
     this.demoBoxRef.nativeElement.style = '';
     void this.demoBoxRef.nativeElement.offsetWidth;
-    this.demoBoxRef.nativeElement.style = 'animation: anim 1s linear;';
+    setTimeout(() => {
+      this.demoBoxRef.nativeElement.style = 'animation: anim 1s linear;';
+    }, 100);
   }
 }

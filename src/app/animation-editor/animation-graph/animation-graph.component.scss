@@ -1,6 +1,10 @@
 .graph-container {
   margin: 10px 0;
 
+  app-graph-editor {
+    margin-top: 10px;
+  }
+
   .create-button {
     font-size: 16px;
     font-weight: 500;
@@ -11,7 +15,7 @@
     background-color: var(--bgCard);
     border: 1px solid rgba(255, 255, 255, 0.676) !important;
     border-radius: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
 
     .mat-icon {
       transform: translateY(-1px);
