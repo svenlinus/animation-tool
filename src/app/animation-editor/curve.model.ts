@@ -1,9 +1,11 @@
 import { AnimationGraphComponent } from './animation-graph/animation-graph.component';
+import { PercentFrame } from './animation.model';
 import { Bezier, Point } from './geometry';
 
 export interface Graph {
   setup(): any;
   draw(): any;
+  sample(): PercentFrame[];
 }
 
 export interface Spline extends Graph {
@@ -13,6 +15,25 @@ export interface Spline extends Graph {
 export class BezierSpline implements Spline {
 
   constructor(private component: AnimationGraphComponent) {
+  }
+
+  public sample(): PercentFrame[] {
+    const comp = this.component;
+    // Attempts to get 40 frames evenly spaced along the x-axis
+    const frames = [];
+    let px = comp.beziers[0].getValue(0).x;
+    let j = 0;
+    for (let i = 0; i < 1; i += 0.0005) {   // Loop through 2000 bezier values
+      const u = i * comp.beziers.length;
+      j = Math.floor(u);
+      const t = u - j;
+      let val = comp.beziers[j].getValue(t);
+      if (val.x - 0.025 < px) continue      // Only add a frame if the current value.x is at least 0.025 away from the previous value.x
+      px = val.x;
+      frames.push({percent: val.x, value: val.y});
+    }
+    frames.push({percent: 1, value: comp.beziers[j].getValue(1).y});
+    return frames;
   }
 
   public setup() {
@@ -169,29 +190,118 @@ export class SpringGraph implements Graph {
   public stiffness: number = 0.1;
   public dampener: number = 0.1;
   public maxVelocity: number = 1;
+  public endPoint: number = 1;
+  public points: Array<{p: number, v: number, a: number}> = [];
+  private pos: number = 0;
+  private vel!: number;
+  private acc!: number;
+  private cp: Array<Point> = [new Point(0, this.initVelocity), new Point(1, this.endPoint)];
 
   constructor(private component: AnimationGraphComponent) {
   }
   public setup() {
+    this.pos = 0;
+    this.vel = this.initVelocity;
+    this.generatePoints();
   }
   public draw() {
     const comp = this.component;
     const s = comp.p5;
-
+    this.drawCurve(s);
+    this.drawControlPoint(s);
   }
-  public add() {
+  private drawControlPoint(s: any) {
     const comp = this.component;
+    s.strokeWeight(1);
+    for (let i = 0; i < this.cp.length; i ++) {
+      const point = this.cp[i];
+
+      if (point.mouseIn(comp.mouse) || point.drag) {
+        comp.mouseInPoint = true;
+        s.cursor('grab');
+        if (s.mouseIsPressed) {
+          point.drag = true;
+          point.track(comp.mouse);
+          point.x = i;
+        } else {
+          point.drag = false;
+        }
+      }
+
+      if (!s.mouseIsPressed && i == 1) {                            // limit last point to 0 and 1
+        point.y = Math.round(point.y);
+      }
+
+      s.stroke(255, 100);
+      s.noFill();
+      const p1 = point.worldToScreen();
+      if (i == 0) {
+        const p2 = new Point(0, 0).worldToScreen();
+        s.line(p1.x, p1.y, p2.x, p2.y);
+      }
+      s.circle(p1.x, p1.y, 10);
+    }
+
+    if (this.endPoint != this.cp[1].y || this.initVelocity != this.cp[0].y) {
+      this.endPoint = this.cp[1].y;
+      this.initVelocity = this.cp[0].y;
+      this.setup();
+    }
+  }
+  private drawCurve(s: any) {
+    s.strokeWeight(2);
+    s.noFill();
+    s.stroke('#2f75ff');
+    s.beginShape();
+    let p = new Point(0, this.points[0].p).worldToScreen();
+    s.vertex(p.x, p.y)
+    for(let i = 0; i < this.points.length; i ++) {
+      p = new Point(i/this.points.length, this.points[i].p).worldToScreen();
+      s.curveVertex(p.x, p.y);
+    }
+    s.vertex(p.x, p.y)
+    s.endShape();
+  }
+  private generatePoints() {
+    this.points = [];
+    let iter = 0;
+    const exitPoint = 0.002;
+    const sample = 2;
+    while (iter < 1000) {
+      if (iter % sample == 0) this.points.push({p: this.pos, v: this.vel, a: this.acc});
+      this.springEquation();
+      iter ++;
+      if (Math.abs(this.vel) <= exitPoint && Math.abs(this.endPoint-this.pos) <= exitPoint && iter > 20) {
+        break;
+      }
+    }
+  }
+  private springEquation() {
+    this.acc = (this.stiffness * (this.endPoint-this.pos)) - (this.dampener * this.vel);
+    this.vel += this.acc;
+    this.vel = this.vel > this.maxVelocity ? this.maxVelocity : (this.vel < -this.maxVelocity ? -this.maxVelocity : this.vel);
+    this.pos += this.vel;
   }
   public setConfig(config: SpringConfig) {
     this.initVelocity = config.initVelocity;
     this.stiffness = config.stiffness;
     this.dampener = config.dampener;
     this.maxVelocity = config.maxVelocity;
+    this.generatePoints();
+  }
+  public sample(): PercentFrame[] {
+    const comp = this.component;
+    const result = this.points.map((p, i) => {return {percent: i / this.points.length, value: p.p}});
+    result.push({percent: 1, value: this.endPoint});
+    return result;
   }
 }
 
 export class LinearSpline implements Spline {
   constructor(private component: AnimationGraphComponent) {
+  }
+  sample(): PercentFrame[] {
+    throw new Error('Method not implemented.');
   }
   remove() {
     throw new Error('Method not implemented.');
@@ -212,6 +322,9 @@ export class LinearSpline implements Spline {
 export class PolynomialSpline implements Spline {
   constructor(private component: AnimationGraphComponent) {
   }
+  sample(): PercentFrame[] {
+    throw new Error('Method not implemented.');
+  }
   remove() {
     throw new Error('Method not implemented.');
   }
@@ -230,6 +343,9 @@ export class PolynomialSpline implements Spline {
 
 export class CustomGraph implements Graph {
   constructor(private component: AnimationGraphComponent) {
+  }
+  sample(): PercentFrame[] {
+    throw new Error('Method not implemented.');
   }
   setup() {
     const comp = this.component;

@@ -149,21 +149,8 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
-
-  public sample() {                        // Attempts to get 40 frames evenly spaced along the x-axis
-    this.frames = [];
-    let px = this.beziers[0].getValue(0).x;
-    let j = 0;
-    for (let i = 0; i < 1; i += 0.0005) {   // Loop through 2000 bezier values
-      const u = i * this.beziers.length;
-      j = Math.floor(u);
-      const t = u - j;
-      let val = this.beziers[j].getValue(t);
-      if (val.x - 0.025 < px) continue      // Only add a frame if the current value.x is at least 0.025 away from the previous value.x
-      px = val.x;
-      this.frames.push({percent: val.x, value: val.y});
-    }
-    this.frames.push({percent: 1, value: this.beziers[j].getValue(1).y});
+  public sample() {
+    this.frames = this.curve.sample();
     this.framesChange.emit(this.frames);
   }
 
