@@ -11,6 +11,7 @@ import { Point, Bezier } from '../geometry';
 })
 export class AnimationGraphComponent implements OnInit, AfterViewInit {
   @Input() public points?: Array<Point>;
+
   private _type!: TimeMapType;
   public curve!: Graph;
   private refresh = false;
@@ -74,9 +75,10 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         document.getElementById(this.canvasId)?.addEventListener('contextmenu', e => e.preventDefault());
         s.background(this.bgColor);
         this.mouse = new Point(0, 0);
+        display();
       };
 
-      s.draw = () => {
+      const display = () => {
         if (this.refresh) s.setup();
         s.cursor(s.ARROW);
         this.mouse.set(s.mouseX, s.mouseY);
@@ -94,7 +96,16 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         if (!this.mouseInPoint && this.inFocus && (this.curve as Spline).add) {
           (this.curve as Spline).add();
         }
+        display();
       };
+
+      s.mouseMoved = () => {
+        display();
+      }
+
+      s.mouseDragged = () => {
+        display();
+      }
 
       s.keyPressed = () => {
         this.keys[s.keyCode] = true;

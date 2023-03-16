@@ -10,7 +10,6 @@ export interface Spline extends Graph {
   add(): any;
 }
 
-
 export class BezierSpline implements Spline {
 
   constructor(private component: AnimationGraphComponent) {
@@ -54,8 +53,10 @@ export class BezierSpline implements Spline {
   private drawControlPoints() {
     const comp = this.component;
     const s = comp.p5;
+    let redraw = false;
     s.strokeWeight(1);
     comp.mouseInPoint = false;
+
     for (let j = 0; j < comp.beziers.length; j ++) {
       const bez = comp.beziers[j];
       for (let i = 0; i < bez.points.length; i ++) {    // loop through all points in all beziers
@@ -64,17 +65,19 @@ export class BezierSpline implements Spline {
 
         if (point.remove) {
           point.remove = false;
+          redraw = true;
           this.remove(j);
         }
 
         if ((point.mouseIn(comp.mouse) || point.drag) && j+i > 0) {      // handle mouse drag for all points except for first
-          if (comp.dragging >= 0 && comp.dragging != i) continue;
+          const id = j * bez.points.length + i;
+          if (comp.dragging >= 0 && comp.dragging != id) continue;
           comp.mouseInPoint = true;
           s.cursor('grab');
-          if (s.mouseIsPressed && s.mouseButton == s.LEFT) {
-            comp.dragging = i;
+          if (s.mouseIsPressed && s.mouseButton == s.LEFT && !comp.keys[16]) {
+            comp.dragging = id;
             point.drag = true;
-            point.track(comp.mouse, 0.158, 0.75);
+            point.track(comp.mouse);
           } else {
             comp.dragging = -1;
             point.drag = false;
@@ -85,6 +88,7 @@ export class BezierSpline implements Spline {
             point.showContextMenu(s, comp, comp.mouse.worldToScreen());
           }
         }
+
         if (!s.mouseIsPressed && point.isLast) {                            // limit last point to 0 and 1
           point.y = Math.round(point.y);
         }
@@ -92,6 +96,7 @@ export class BezierSpline implements Spline {
           point.showContextMenu(s, comp);
           if (comp.mouseUp) point.showMenu = false;
         }
+
         s.stroke(255, 100);
         s.noFill();
         const p1 = point.worldToScreen();
@@ -101,6 +106,12 @@ export class BezierSpline implements Spline {
         }
         s.circle(p1.x, p1.y, 10);
       }
+    }
+
+    if (redraw) {
+      s.background(comp.bgColor);
+      this.drawControlPoints();
+      this.drawCurve();
     }
   }
 
@@ -137,7 +148,6 @@ export class BezierSpline implements Spline {
   }
 
   public remove(i: number) {
-    console.warn(i);
     const comp = this.component;
     const b1 = comp.beziers[i - 1];
     const b2 = comp.beziers[i];
@@ -155,28 +165,22 @@ interface SpringConfig {
 }
 
 export class SpringGraph implements Graph {
-  private initVelocity: number = 0.1;
-  private stiffness: number = 0.1;
-  private dampener: number = 0.1;
-  private maxVelocity: number = 1;
+  public initVelocity: number = 0.1;
+  public stiffness: number = 0.1;
+  public dampener: number = 0.1;
+  public maxVelocity: number = 1;
 
   constructor(private component: AnimationGraphComponent) {
   }
   public setup() {
-    const comp = this.component;
   }
   public draw() {
     const comp = this.component;
     const s = comp.p5;
+
   }
   public add() {
     const comp = this.component;
-  }
-  public getConfig(): SpringConfig {
-    return {initVelocity: this.initVelocity,
-       stiffness: this.stiffness, 
-       dampener: this.dampener, 
-       maxVelocity: this.maxVelocity};
   }
   public setConfig(config: SpringConfig) {
     this.initVelocity = config.initVelocity;

@@ -44,7 +44,9 @@ export class Point {
     this.y = y;
     return this;
   }
-  public track(v: Point, w: number, h: number) {
+  public track(v: Point, w?: number, h?: number) {
+    if (!w) w = 0.158;
+    if (!h) h = 0.75;
     if (this.showMenu) return;
     const x = v.x < -w ? -w : (v.x > 1+w ? 1+w : v.x);
     const y = v.y < -h ? -h : (v.y > 1+h ? 1+h : v.y);
@@ -144,7 +146,10 @@ export class Point {
         c1 = 220;
         s.cursor(s.HAND);
         comp.mouseInPoint = true;
-        if (comp.mouseUp) this.separated = !this.separated;
+        if (comp.mouseUp) {
+          this.separated = !this.separated;
+          this.children![0].track(this.children![0]);
+        }
       } else if (s.mouseY <= this.contextMenuPos.y + 60) {
         comp.mouseInPoint = true;
         s.cursor(s.HAND);
