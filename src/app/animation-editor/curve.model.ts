@@ -303,9 +303,6 @@ export class LinearSpline implements Spline {
   sample(): PercentFrame[] {
     throw new Error('Method not implemented.');
   }
-  remove() {
-    throw new Error('Method not implemented.');
-  }
   public setup() {
     const comp = this.component;
   }
@@ -322,21 +319,18 @@ export class LinearSpline implements Spline {
 export class PolynomialSpline implements Spline {
   constructor(private component: AnimationGraphComponent) {
   }
-  sample(): PercentFrame[] {
+  public sample(): PercentFrame[] {
     throw new Error('Method not implemented.');
   }
-  remove() {
-    throw new Error('Method not implemented.');
-  }
-  setup() {
+  public setup() {
     const comp = this.component;
     
   }
-  draw() {
+  public draw() {
     const comp = this.component;
     const s = comp.p5;
   }
-  add() {
+  public add() {
     const comp = this.component;
   }
 }
@@ -344,17 +338,17 @@ export class PolynomialSpline implements Spline {
 export class CustomGraph implements Graph {
   constructor(private component: AnimationGraphComponent) {
   }
-  sample(): PercentFrame[] {
+  public sample(): PercentFrame[] {
     throw new Error('Method not implemented.');
   }
-  setup() {
+  public setup() {
     const comp = this.component;
   }
-  draw() {
+  public draw() {
     const comp = this.component;
     const s = comp.p5;
   }
-  add() {
+  public add() {
     const comp = this.component;
   }
 }
