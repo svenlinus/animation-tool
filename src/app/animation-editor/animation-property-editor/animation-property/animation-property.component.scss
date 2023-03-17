@@ -1,5 +1,7 @@
 .property-container {
   min-height: 250px;
+  min-width: 200px;
+
 
   .header {
     background-color: var(--bgColor);
@@ -14,6 +16,7 @@
   .property-settings-table {
     margin:10px;
     margin-left: 20px;
+
 
     .label {
       font-size: 16px;
