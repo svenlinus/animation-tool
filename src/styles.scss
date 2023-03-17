@@ -12,8 +12,8 @@ $my-theme: mat-light-theme($my-primary, $my-accent);
 html, body { height: 100%; }
 
 body { 
-  --bgCard: #303f4f;
-  --bgColor: #293542;
+  --bgCard: hsl(211 26% 24% / 1);
+  --bgColor: hsl(211 26% 21% / 1);
   --primary: #1976d2;
   --primaryDim: #1976d25f;
 

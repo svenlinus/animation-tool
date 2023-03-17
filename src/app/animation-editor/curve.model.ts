@@ -38,8 +38,13 @@ export class BezierSpline implements Spline {
 
   public setup() {
     const comp = this.component;
-    comp.beziers = [new Bezier(comp.points || [])];
-    comp.beziers[0].points[3].isLast = true;
+    let j = -1;
+    comp.beziers = [];
+    for (let i = 0; i < (comp.points ? comp.points.length : 0); i += 4) {
+      comp.beziers.push(new Bezier(comp.points!.slice(i, i+4)));
+      j ++;
+    }
+    if (j >= 0) comp.beziers[j].points[3].isLast = true;
   }
 
   public draw() {
