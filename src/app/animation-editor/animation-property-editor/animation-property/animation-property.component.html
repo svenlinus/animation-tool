@@ -1,4 +1,4 @@
-<div class="property-container">
+<div class="property-container shadow-border">
   <div class="header">
     <h1>{{property}}</h1>
   </div>
@@ -12,7 +12,7 @@
         <td>
           <mat-form-field class="form-field number" appearance="fill">
             <input matInput type="number" class="num-input" (keyup)="updateStart($event)" value={{start}}>
-            <!-- <span matTextSuffix>{{unit}}</span> -->
+            <span matTextSuffix>{{unit}}</span>
           </mat-form-field>
           
         </td>
@@ -24,6 +24,7 @@
         <td>
           <mat-form-field class="form-field number" appearance="fill">
             <input matInput type="number" class="num-input" (keyup)="updateEnd($event)" value={{end}}>
+            <span matTextSuffix>{{unit}}</span>
           </mat-form-field>
         </td>
       </tr>

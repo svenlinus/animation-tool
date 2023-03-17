@@ -11,20 +11,20 @@ export class AnimationPropertyComponent implements OnInit {
   
   public start: number = 1;
   public end: number = -1;
-  public unit: string = "Default";
+  public unit: string = "";
   public hasUnits : boolean = false;
 
 
   constructor() {
     if (this.property && CssUnits.unitsDict.has(this.property)) {
-      this.unit = (CssUnits.unitsDict.get(this.property) || ["Default"])[0];
+      this.unit = (CssUnits.unitsDict.get(this.property) || [""])[0];
     }
    }
 
   ngOnInit(): void {
     this.hasUnits = CssUnits.unitsDict.has(this.property);
     if (this.property && CssUnits.unitsDict.has(this.property)) {
-      this.unit = (CssUnits.unitsDict.get(this.property) || ["Default"])[0];
+      this.unit = (CssUnits.unitsDict.get(this.property) || [""])[0];
     }
   }
 

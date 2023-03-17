@@ -35,7 +35,7 @@ export class CssUnits {
   public static unitsDict : Map<AnimationProperty | undefined, Array<string>> = new Map<AnimationProperty, Array<string>>([
     [AnimationProperty.ScaleX, ["px", "vh", "vx"]],
     [AnimationProperty.ScaleY, ["px", "vh", "vx"]],
-    [AnimationProperty.Rotate, ["Degrees", "Rad"]],
+    [AnimationProperty.Rotate, ["°", "Rad"]],
     [AnimationProperty.TransformX, ["px", "vh", "vx"]],
     [AnimationProperty.TransformY, ["px", "vh", "vx"]],
     [AnimationProperty.SkewX, ["px", "%"]],
