@@ -33,12 +33,12 @@ export enum AnimationProperty {     // to be continued
 
 export class CssUnits {
   public static unitsDict : Map<AnimationProperty | undefined, Array<string>> = new Map<AnimationProperty, Array<string>>([
-    [AnimationProperty.ScaleX, ["px", "vh", "vx"]],
-    [AnimationProperty.ScaleY, ["px", "vh", "vx"]],
-    [AnimationProperty.Rotate, ["°", "Rad"]],
-    [AnimationProperty.TransformX, ["px", "vh", "vx"]],
-    [AnimationProperty.TransformY, ["px", "vh", "vx"]],
-    [AnimationProperty.SkewX, ["px", "%"]],
-    [AnimationProperty.SkewY, ["px", "%"]],
+    [AnimationProperty.ScaleX, ["None", "%"]],
+    [AnimationProperty.ScaleY, ["None", "%"]],
+    [AnimationProperty.Rotate, ["Deg", "Rad"]],
+    [AnimationProperty.TransformX, ["px", "vh", "vw", "%"]],
+    [AnimationProperty.TransformY, ["px", "vh", "vw", "%"]],
+    [AnimationProperty.SkewX, ["Deg", "px", "%"]],
+    [AnimationProperty.SkewY, ["Deg", "px", "%"]],
   ]);
 }

@@ -1,7 +1,7 @@
 .property-container {
   min-height: 250px;
   min-width: 200px;
-
+  overflow: hidden;
 
   .header {
     background-color: var(--bgColor);
@@ -55,7 +55,19 @@
       }
 
       &.number {
-        max-width: 80px;
+        max-width: 72px;
+        position: relative;
+
+        .num-input {
+          width: 100%;
+        }
+        .suffix {
+          position: absolute;
+          color: var(--gray);
+          top: 18%;
+          left: 130%;
+          // transform: translateX(20px);
+        }
       }
     }
   }

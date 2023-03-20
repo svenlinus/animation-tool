@@ -16,9 +16,6 @@ export class AnimationPropertyComponent implements OnInit {
 
 
   constructor() {
-    if (this.property && CssUnits.unitsDict.has(this.property)) {
-      this.unit = (CssUnits.unitsDict.get(this.property) || [""])[0];
-    }
    }
 
   ngOnInit(): void {
