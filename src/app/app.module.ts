@@ -18,6 +18,8 @@ import { AnimationEditorComponent } from './animation-editor/animation-editor.co
 import { AnimationGraphComponent } from './animation-editor/animation-graph/animation-graph.component';
 import { AnimationPropertyEditorComponent } from './animation-editor/animation-property-editor/animation-property-editor.component';
 import { AnimationPropertyComponent } from './animation-editor/animation-property-editor/animation-property/animation-property.component';
+import { AnimationDemoComponent } from './animation-editor/animation-demo/animation-demo.component';
+import { AnimationOptionsComponent } from './animation-editor/animation-options/animation-options.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { AnimationPropertyComponent } from './animation-editor/animation-propert
     AnimationGraphComponent,
     AnimationPropertyEditorComponent,
     AnimationPropertyComponent,
-    SpringEditorComponent
+    SpringEditorComponent,
+    AnimationDemoComponent,
+    AnimationOptionsComponent
   ],
   imports: [
     BrowserModule,

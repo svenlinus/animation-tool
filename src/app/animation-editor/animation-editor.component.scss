@@ -42,10 +42,11 @@
     .content {
       display: flex;
       flex-direction: row;
+      gap: 30px;
 
       app-animation-property-editor {
         flex-grow: 1;
-        width: 50%;
+        width: 100%;
       }
       app-animation-graph {
         flex-grow: 1;
