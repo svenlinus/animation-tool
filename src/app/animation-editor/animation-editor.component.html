@@ -20,8 +20,33 @@
             <mat-option *ngFor="let type of mapTypes" [value]="type" class="type-option">{{type}}</mat-option>
           </mat-select>
         </mat-panel-title>
-        <!-- <mat-panel-title>{{tm.type + " Graph"}}</mat-panel-title> -->
-        <mat-panel-description class="subtitle" [innerHTML]="panelDescriptions[i]"></mat-panel-description>
+        <mat-panel-description class="description">
+          <mat-chip-list aria-label="Property selection" class="chip-list">
+            <mat-chip *ngFor="let prop of tm.properties; index as j" class="chip white-border">
+              <div class="chip-text">{{prop.func}}</div>
+              <button matChipRemove [attr.aria-label]="'remove ' + prop.func" (click)="removeProperty(i, j)">
+                <mat-icon style="color: var(--gray);">close</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-list>
+          <mat-form-field class="example-full-width" appearance="fill" 
+                          class="add-property-form" 
+                          (mouseenter)="setSelectingType(true)" 
+                          (mouseleave)="setSelectingType(false)">
+            <input type="text"
+                   placeholder="Add property"
+                   aria-label="Number"
+                   matInput
+                   [formControl]="chipControl"
+                   [matAutocomplete]="auto"
+                   class="input">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='addChip($event.option.value, tm)'>
+              <mat-option *ngFor="let option of filteredCssFunctions | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="content">
         <app-animation-graph [type]="tm.type" [(points)]="tm.bezierPoints" (framesChange)="onFramesChanged($event, tm)"></app-animation-graph>

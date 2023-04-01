@@ -9,64 +9,100 @@
 
     h1 {
       margin: 0;
+      text-transform: capitalize;
     }
   }
 
-
-  .property-settings-table {
+  .property-settings {
     margin:10px;
     margin-left: 20px;
 
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
 
-    .label {
-      font-size: 16px;
-    }
+      &.limit-range {
+        margin-left: 10px;
+      }
 
-    .form-field {
-      transform: translateY(5px);
-      margin-left: 5px;
+      .label {
+        font-size: 16px;
+      }
 
-      ::ng-deep {
-        .mat-form-field-flex {
-          background-color: var(--bgCard);
-        }
-        .mat-form-field-infix {
-          border-top: 0;
+      &.limit-checkbox {
+        display: flex;
+        margin-top: 8px;
+        margin-bottom: 2px;
+
+        .label {
+          margin-right: 8px;
         }
       }
 
-      &.select {
-        max-width: 80px;
+      .form-field {
+        transform: translateY(10px);
+        margin-left: 5px;
 
-        .unit-select {
-  
-          ::ng-deep {
-            .mat-select-value {
-              color: white;
-            }
-            .mat-select-arrow-wrapper {
-              transform: translateY(0px);
-            }
-            .mat-form-field-underline {
-              background-color: var(--accent) !important;
+        ::ng-deep {
+          .mat-form-field-wrapper {
+            padding-bottom: 1em;
+          }
+          .mat-form-field-flex {
+            background-color: var(--bgCard);
+            padding-top: 0;
+            padding-right: 0.1em;
+          }
+          .mat-form-field-infix {
+            border-top: 0;
+          }
+        }
+
+        &.select {
+          max-width: 72px;
+
+          .unit-select {
+    
+            ::ng-deep {
+              .mat-select-value {
+                color: white;
+              }
+              .mat-select-arrow-wrapper {
+                transform: translateY(0px);
+              }
+              .mat-form-field-underline {
+                background-color: var(--accent) !important;
+              }
             }
           }
         }
-      }
 
-      &.number {
-        max-width: 72px;
-        position: relative;
+        &.number {
+          max-width: 64px;
 
-        .num-input {
-          width: 100%;
+          .num-input {
+            width: 100%;
+          }
+          .suffix {
+            position: absolute;
+            color: var(--gray);
+            top: 18%;
+            left: 130%;
+          }
         }
-        .suffix {
-          position: absolute;
-          color: var(--gray);
-          top: 18%;
-          left: 130%;
-          // transform: translateX(20px);
+
+        &.limit {
+          max-width: 64px;
+
+          .num-input {
+            width: 100%;
+          }
+        }
+
+        ::ng-deep {
+          .mat-form-field-flex {
+            padding-left: 0.4em;
+          }
         }
       }
     }

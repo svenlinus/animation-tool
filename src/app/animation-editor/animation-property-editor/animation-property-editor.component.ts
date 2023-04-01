@@ -1,4 +1,4 @@
-import { AnimationProperty } from './../animation.model';
+import { AnimationProperty } from '../animation.model';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({

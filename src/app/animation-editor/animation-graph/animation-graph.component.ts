@@ -1,5 +1,5 @@
-import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph, SpringConfig } from './../curve.model';
-import { PercentFrame, TimeMapType } from './../animation.model';
+import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph, SpringConfig } from '../curve.model';
+import { PercentFrame, TimeMapType } from '../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as p5 from 'p5';
 import { Point, Bezier } from '../geometry';

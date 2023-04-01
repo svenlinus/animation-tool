@@ -173,3 +173,10 @@ export class Point {
     s.pop();
   }
 }
+
+export class Interpolate {
+  public static lerp(a: number, b: number, t: number): number {
+    if (!b) return a;
+    return a + (b - a) * t;
+  }
+}

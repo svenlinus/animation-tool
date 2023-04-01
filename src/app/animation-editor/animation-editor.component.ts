@@ -1,6 +1,8 @@
-import { AnimationProperty, TimeMapType, TimeMap, PercentFrame } from './animation.model';
+import { AnimationProperty, TimeMapType, TimeMap, PercentFrame, CssFunction } from './animation.model';
 import { Point } from "./geometry"
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-animation-editor',
@@ -13,36 +15,50 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
   `],
 })
 export class AnimationEditorComponent implements OnInit {
+  public static numFrames: number = 20;
+
   public timeMaps: Array<TimeMap> = [];
   public panelDescriptions: Array<string> = [];
   public mapTypes: Array<TimeMapType> = Object.values(TimeMapType);
   public selectingType: boolean = false;
-  public numFrames: number = 40;
+  public filteredCssFunctions!: Observable<Array<string>>;
+  public chipControl = new FormControl('');
 
-  // private animationContainerRef?: ElementRef;
   @ViewChild('animationContainer') animationContainerRef!: ElementRef;
 
-  private percentFrames: Array<PercentFrame> = [];
   private cssFrames: string = '';
   private defaultMap!: TimeMap;
-  private openAnimationProperties: Array<AnimationProperty> = Object.values(AnimationProperty);
+  private closedFunctionsList: Array<string> = [];
+  private cssFunctions: Array<string> = Object.values(CssFunction);
 
   constructor() {
   }
 
   ngOnInit(): void {
+    this.filteredCssFunctions = this.chipControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.filterCssFunctions(value || '')),
+    );
   }
 
-  createDefaultMap() {
-    if (this.openAnimationProperties.length > 0) {
-      const props = [this.openAnimationProperties[0]]
-      if (this.openAnimationProperties[0].includes('X')) {
-        props.push(this.openAnimationProperties[1]);
-        this.openAnimationProperties.shift();
+  private filterOptions() {
+    this.chipControl.enable();
+  }
+
+  public createDefaultMap() {
+    if (this.closedFunctionsList.length < this.cssFunctions.length) {
+      const props = [this.cssFunctions.find(x => !this.closedFunctionsList.includes(x))];
+      if (props[0]) this.closedFunctionsList.push(props[0]);
+      if (props[0] && props[0].includes('X')) {
+        const p2 = props[0].replace('X', 'Y');
+        if (!this.closedFunctionsList.includes(p2)) {
+          props.push(p2);
+          this.closedFunctionsList.push(p2);
+        }
       }
-      this.openAnimationProperties.shift();
+      this.filterOptions();
       this.defaultMap = {
-        properties: props,
+        properties: props.map(prop => new AnimationProperty(<CssFunction>prop)),
         type: TimeMapType.Bezier,
         frames: [],
         bezierPoints: [new Point(0, 0), 
@@ -53,10 +69,28 @@ export class AnimationEditorComponent implements OnInit {
     }
   }
 
+  public addChip(value: string, timeMap: TimeMap) {
+    const key: keyof typeof CssFunction = value[0].toUpperCase() + value.slice(1) as (keyof typeof CssFunction);
+    this.chipControl.reset();
+    const prop = new AnimationProperty(CssFunction[key]);
+    this.closedFunctionsList.push(prop.func);
+    timeMap.properties.push(prop);
+    this.filterOptions();
+    console.warn(this.closedFunctionsList);
+  }
+
+  public removeProperty(i:number, j: number) {
+    const ci =this.closedFunctionsList.indexOf(this.timeMaps[i].properties[j].func);
+    this.closedFunctionsList.splice(ci, 1);
+    this.timeMaps[i].properties.splice(j, 1);
+    this.filterOptions();
+    console.warn(this.closedFunctionsList);
+  }
+
   public createPanelDescription(i: number) {
     let description = 'Animating';
     for (let j = 0; j < this.timeMaps[i].properties.length; j++) {
-      const p = this.timeMaps[i].properties[j];
+      const p = this.timeMaps[i].properties[j].func;
       if (j > 0) description += '&nbsp;and';
       description += `&nbsp;<strong>${p}</strong>`;
     }
@@ -79,26 +113,32 @@ export class AnimationEditorComponent implements OnInit {
     this.generateCssFrames();
   }
 
+  private filterCssFunctions(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.cssFunctions.filter(option => option.toLowerCase().includes(filterValue))
+      .filter(option => !this.closedFunctionsList.includes(option));
+  }
+
   private generateCssFrames() {
     this.cssFrames = '@keyframes anim {\n'
-    for (let i = 0; i < this.timeMaps[0].frames.length; i++) {
+    for (let i = 0; i < AnimationEditorComponent.numFrames + 1; i++) {
+      const percent = Math.round(i/AnimationEditorComponent.numFrames * 1000) / 10;
+      this.cssFrames += `${percent}% { transform: `
       for (let tm of this.timeMaps) {
-        const val = Math.round(tm.frames[i].value * 10000) / 10000 * 0.5;
-        this.cssFrames += `${(i+1)/this.numFrames * 100}% { transform: scale(${1 + val}, ${1 - val}) }\n`
-        // for (let p of tm.properties) {
-        //   const prefix = p != AnimationProperty.Color ? 'transform: ' : '';
-        //   this.cssFrames += `${prefix} scale`;
-        // }
+        if (tm.frames[i] == null) continue;
+        const val = tm.frames[i].value;
+        for (let prop of tm.properties) {
+          this.cssFrames += prop.createFunction(val) + ' ';
+        }
       }
+      this.cssFrames += '}\n'
     }
-
     this.cssFrames += '}'
     this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + '</style>';
 
     console.warn(this.cssFrames);
     this.playAnimation();
   }
-
 
   public playAnimation() {
 
