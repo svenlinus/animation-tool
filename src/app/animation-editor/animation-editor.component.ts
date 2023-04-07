@@ -69,6 +69,12 @@ export class AnimationEditorComponent implements OnInit {
     }
   }
 
+  public removeTimeMap(i: number) {
+    const props = [...this.timeMaps[i].properties];
+    props.forEach(p => this.removeProperty(i, 0));
+    this.timeMaps.splice(i, 1);
+  }
+
   public addChip(value: string, timeMap: TimeMap) {
     const key: keyof typeof CssFunction = value[0].toUpperCase() + value.slice(1) as (keyof typeof CssFunction);
     this.chipControl.reset();
@@ -76,25 +82,13 @@ export class AnimationEditorComponent implements OnInit {
     this.closedFunctionsList.push(prop.func);
     timeMap.properties.push(prop);
     this.filterOptions();
-    console.warn(this.closedFunctionsList);
   }
 
   public removeProperty(i:number, j: number) {
-    const ci =this.closedFunctionsList.indexOf(this.timeMaps[i].properties[j].func);
+    const ci = this.closedFunctionsList.indexOf(this.timeMaps[i].properties[j].func);
     this.closedFunctionsList.splice(ci, 1);
     this.timeMaps[i].properties.splice(j, 1);
     this.filterOptions();
-    console.warn(this.closedFunctionsList);
-  }
-
-  public createPanelDescription(i: number) {
-    let description = 'Animating';
-    for (let j = 0; j < this.timeMaps[i].properties.length; j++) {
-      const p = this.timeMaps[i].properties[j].func;
-      if (j > 0) description += '&nbsp;and';
-      description += `&nbsp;<strong>${p}</strong>`;
-    }
-    this.panelDescriptions[i] = description;
   }
 
   public setSelectingType(val: boolean) {
@@ -104,7 +98,6 @@ export class AnimationEditorComponent implements OnInit {
   public addTimeMap() {
     this.createDefaultMap();
     this.timeMaps.push(this.defaultMap);
-    this.createPanelDescription(this.panelDescriptions.length);
   }
 
   public onFramesChanged(frames: Array<PercentFrame>, timeMap: TimeMap) {

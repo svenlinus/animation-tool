@@ -84,7 +84,7 @@
         justify-content: flex-start;
         align-items: center;
         flex-basis: 0;
-        flex-grow: 2.4;
+        flex-grow: 2.3;
         
         .chip-list {
           .chip {
@@ -127,6 +127,18 @@
               visibility: hidden;
             }
           }
+        }
+      }
+
+      .close-button {
+        background-color: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        mat-icon {
+          transform: scale(1.2);
         }
       }
     }

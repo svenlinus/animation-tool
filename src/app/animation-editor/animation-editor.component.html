@@ -47,6 +47,9 @@
             </mat-autocomplete>
           </mat-form-field>
         </mat-panel-description>
+        <button class="close-button" (click)="removeTimeMap(i)">
+          <mat-icon style="color: var(--gray);">close</mat-icon>
+        </button>
       </mat-expansion-panel-header>
       <div class="content">
         <app-animation-graph [type]="tm.type" [(points)]="tm.bezierPoints" (framesChange)="onFramesChanged($event, tm)"></app-animation-graph>

@@ -1,8 +1,13 @@
-import { BezierSpline, LinearSpline, PolynomialSpline, CustomGraph, Graph, Spline, SpringGraph, SpringConfig } from '../curve.model';
+import { Graph, Spline, SpringConfig } from '../curve.model';
 import { PercentFrame, TimeMapType } from '../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as p5 from 'p5';
 import { Point, Bezier } from '../geometry';
+import { BezierSpline } from '../curves/BezierSpline';
+import { SpringGraph } from '../curves/SpringGraph';
+import { LinearSpline } from '../curves/LinearSpline';
+import { PolynomialSpline } from '../curves/PolynomialSpline';
+import { CustomGraph } from '../curves/CustomGraph';
+import * as p5 from 'p5';
 
 @Component({
   selector: 'app-animation-graph',
@@ -54,10 +59,10 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public mouseUp: boolean = false;
   public keys: Array<boolean> = [];
   public springConfig!: SpringConfig;
+  public inFocus: boolean = false;
   
   private canvas: any;
-  private frames: Array<PercentFrame> = []
-  private inFocus: boolean = false;
+  private frames: Array<PercentFrame> = [];
 
   constructor() {
   }
