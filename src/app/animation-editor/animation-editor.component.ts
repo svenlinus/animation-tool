@@ -39,6 +39,7 @@ export class AnimationEditorComponent implements OnInit {
       startWith(''),
       map(value => this.filterCssFunctions(value || '')),
     );
+    this.loadAnimation();
   }
 
   private filterOptions() {
@@ -73,6 +74,7 @@ export class AnimationEditorComponent implements OnInit {
     const props = [...this.timeMaps[i].properties];
     props.forEach(p => this.removeProperty(i, 0));
     this.timeMaps.splice(i, 1);
+    this.generateCssFrames();
   }
 
   public addChip(value: string, timeMap: TimeMap) {
@@ -82,6 +84,7 @@ export class AnimationEditorComponent implements OnInit {
     this.closedFunctionsList.push(prop.func);
     timeMap.properties.push(prop);
     this.filterOptions();
+    this.generateCssFrames();
   }
 
   public removeProperty(i:number, j: number) {
@@ -89,6 +92,7 @@ export class AnimationEditorComponent implements OnInit {
     this.closedFunctionsList.splice(ci, 1);
     this.timeMaps[i].properties.splice(j, 1);
     this.filterOptions();
+    this.generateCssFrames();
   }
 
   public setSelectingType(val: boolean) {
@@ -96,8 +100,12 @@ export class AnimationEditorComponent implements OnInit {
   }
 
   public addTimeMap() {
+    const offsetY = document.body.clientHeight - window.scrollY;
     this.createDefaultMap();
     this.timeMaps.push(this.defaultMap);
+    setTimeout(() => {
+      window.scrollTo(0, document.body.clientHeight - offsetY);
+    }, 10);
   }
 
   public onFramesChanged(frames: Array<PercentFrame>, timeMap: TimeMap) {
@@ -112,28 +120,54 @@ export class AnimationEditorComponent implements OnInit {
       .filter(option => !this.closedFunctionsList.includes(option));
   }
 
-  private generateCssFrames() {
+  public generateCssFrames() {
     this.cssFrames = '@keyframes anim {\n'
     for (let i = 0; i < AnimationEditorComponent.numFrames + 1; i++) {
       const percent = Math.round(i/AnimationEditorComponent.numFrames * 1000) / 10;
-      this.cssFrames += `${percent}% { transform: `
+      let significant = false;  // if all time maps have an insignificant frame at this position do not add a keyframe 
+      let keyframeString = '';
       for (let tm of this.timeMaps) {
-        if (tm.frames[i] == null) continue;
-        const val = tm.frames[i].value;
+        if (!tm.frames[i]) continue;
+        if (!tm.frames[i].insignificant) significant = true;
+        const val = tm.frames[i].value!;
         for (let prop of tm.properties) {
-          this.cssFrames += prop.createFunction(val) + ' ';
+          keyframeString += prop.createFunction(val) + ' ';
         }
       }
-      this.cssFrames += '}\n'
+      if (keyframeString.length > 0 && significant) {
+        this.cssFrames += `${percent}% { transform: ${keyframeString}}\n`;
+      }
     }
     this.cssFrames += '}'
     this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + '</style>';
-
+    this.loadAnimation();
     console.warn(this.cssFrames);
-    this.playAnimation();
   }
 
-  public playAnimation() {
 
+  public loadAnimation() {
+    const spinners = document.querySelectorAll('.spinner');
+    const cont = document.querySelector('.loader');
+    const opt: KeyframeAnimationOptions = {
+      duration: 1500,
+      easing: "ease-in-out",
+      fill: 'forwards'
+    };
+    cont?.animate([
+      {transform: 'rotate(0)', visibility: 'visible'},
+      {transform: 'rotate(270deg)'},
+      {transform: 'rotate(270deg)', visibility: 'hidden'}
+    ], opt);
+    spinners.forEach((spin, i) => {
+      const options: KeyframeAnimationOptions = {
+        duration: 600 + (150 * i),
+        easing: "ease-in-out",
+        fill: 'forwards'
+      };
+      spin.animate([
+        {transform: 'rotate(0)'},
+        {transform: `rotate(${90 * i}deg)`}
+      ], options);
+    });
   }
 }

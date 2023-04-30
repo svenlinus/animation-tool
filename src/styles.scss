@@ -11,18 +11,36 @@ $my-theme: mat-light-theme($my-primary, $my-accent);
 
 html, body { height: 100%; }
 
-body { 
+:root {
   --bgCard: hsl(211 26% 24% / 1);
-  --bgColor: hsl(211 26% 21% / 1);
+  --bgColor: hsl(211 26% 20% / 1);
+  --bgInput: hsl(211 26% 20% / 1);
   --bgGraph: rgb(25, 33, 42);
   --primary: #1976d2;
   --primaryDim: #1976d25f;
-
   --medOrange: #f53303;
   --gray: #c3c3c3;
+}
+
+body {
   background-color: var(--bgColor);
   margin: 0;
+  height: auto !important;
   font-family: 'Source Sans Pro', sans-serif;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: none;
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(25, 33, 42);
+  border-radius: 5px;
 }
 
 .white-border {

@@ -60,9 +60,11 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public keys: Array<boolean> = [];
   public springConfig!: SpringConfig;
   public inFocus: boolean = false;
+  public compression: number = 0.1;
+  public frames: Array<PercentFrame> = [];
   
   private canvas: any;
-  private frames: Array<PercentFrame> = [];
+  private displayCurve: boolean = true;
 
   constructor() {
   }
@@ -95,7 +97,8 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         s.background(this.bgColor);
         s.textAlign(s.CENTER, s.CENTER);
         drawGrid();
-        this.curve.draw();
+        if (this.displayCurve)
+          this.curve.draw();
         drawFrames();
         this.mouseUp = false;
       };
@@ -109,6 +112,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
       };
 
       s.mouseMoved = () => {
+        this.displayCurve = true;
         display();
       }
 
@@ -127,9 +131,12 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
       const drawFrames = () => {
         for (let frame of this.frames) {
           const pos = new Point(frame.percent, frame.value).worldToScreen(this.zoom, this.offset);
-          s.stroke(255, 150);
-          s.strokeWeight(2);
-          s.point(pos.x, pos.y);
+          if (!frame.insignificant)
+            s.fill(255, 200);
+          else
+            s.fill(255, 60);
+          s.noStroke();
+          s.circle(pos.x, pos.y, 5);
         }
       }
 
@@ -160,6 +167,42 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
 
   public sample() {
     this.frames = this.curve.sample();
+    this.compressFrames();
+    this.emitFrames();
+  }
+
+  private compressFrames() {
+    for (let i = 0; i < this.frames.length; i ++) {
+      this.frames[i].insignificant = undefined;
+    }
+    for (let i = 0, j = 1; i < this.frames.length - 2; i ++, j = i + 1) {
+      let past = this.frames[i],
+          current = this.frames[j],
+          next = this.frames[j + 1];
+      while (j < this.frames.length - 1 && Math.abs(this.slopeBetween(past, current) - this.slopeBetween(current, next)) < this.compression) {
+        current.insignificant = true;
+        j ++;
+        current = this.frames[j];
+        next = this.frames[j + 1];
+      }
+    }
+  }
+
+  private slopeBetween(f1: PercentFrame, f2: PercentFrame) {
+    return (f2.value - f1.value) / (f2.percent - f1.percent);
+  }
+
+  public formatLabel(value: number): string {
+    return `${Math.round(value*100)}`;
+  }
+
+  public updateCompression(event: any) {
+    this.compression = event.value;
+    this.displayCurve = false;
+    this.compressFrames();
+  }
+
+  public emitFrames() {
     this.framesChange.emit(this.frames);
   }
 

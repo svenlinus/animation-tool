@@ -1,5 +1,5 @@
-import { AnimationProperty, PropertyConfig } from '../../animation.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { AnimationProperty } from '../../animation.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-animation-property',
@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AnimationPropertyComponent implements OnInit {
   @Input() public property!: AnimationProperty;
+  @Output() public change = new EventEmitter<any>();
   public hasLimits: boolean = false;
   public limitMin!: number;
   public limitMax!: number;
@@ -22,24 +23,29 @@ export class AnimationPropertyComponent implements OnInit {
 
   updateStart(event: any) {
     this.property.start = Number(event.target.value);
+    this.change.emit();
   }
 
   updateEnd(event: any) {
     this.property.end = Number(event.target.value);
+    this.change.emit();
   }
 
   updateUnit(event: any) {
     this.property.unit = event.value;
+    this.change.emit();
   }
 
   updateLimitMin(event: any) {
     this.limitMin = Number(event.target.value);
     this.property.limit = {min: this.limitMin, max: this.limitMax};
+    this.change.emit();
   }
 
   updateLimitMax(event: any) {
     this.limitMax = Number(event.target.value);
     this.property.limit = {min: this.limitMin, max: this.limitMax};
+    this.change.emit();
   }
 
   toggleLimits() {
@@ -49,6 +55,7 @@ export class AnimationPropertyComponent implements OnInit {
     } else {
       this.property.limit = undefined;
     }
+    this.change.emit();
   }
 
 }

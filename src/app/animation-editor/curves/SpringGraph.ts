@@ -8,7 +8,6 @@ export class SpringGraph implements Graph {
   public initVelocity: number = 0.1;
   public stiffness: number = 0.1;
   public dampener: number = 0.1;
-  public maxVelocity: number = 1;
   public endPoint: number = 1;
   public points: Array<SpringPoint> = [];
   private pos: number = 0;
@@ -109,13 +108,11 @@ export class SpringGraph implements Graph {
   private springEquation() {
     this.acc = (this.stiffness * (this.endPoint-this.pos)) - (this.dampener * this.vel);
     this.vel += this.acc;
-    this.vel = this.vel > this.maxVelocity ? this.maxVelocity : (this.vel < -this.maxVelocity ? -this.maxVelocity : this.vel);
     this.pos += this.vel;
   }
   public setConfig(config: SpringConfig) {
     this.stiffness = config.stiffness;
     this.dampener = config.dampener;
-    this.maxVelocity = config.maxVelocity;
     this.initVelocity = config.initVelocity;
     this.generatePoints();
   }
@@ -123,7 +120,6 @@ export class SpringGraph implements Graph {
     return {
       stiffness: this.stiffness,
       dampener: this.dampener,
-      maxVelocity: this.maxVelocity,
       initVelocity: this.initVelocity
     }
   }

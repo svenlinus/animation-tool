@@ -2,10 +2,6 @@
   <app-animation-options></app-animation-options>
   <div #animationContainer></div>
   <app-animation-demo></app-animation-demo>
-  <button mat-button class="create-button" (click)="addTimeMap()">
-    <mat-icon aria-hidden="false" aria-label="Add">add</mat-icon>
-    Create Time Graph
-  </button>
   <mat-accordion>
     <mat-expansion-panel *ngFor="let tm of timeMaps; index as i" class="property-panel" [disabled]="selectingType" hideToggle="">
       <mat-expansion-panel-header class="panel-header">
@@ -22,7 +18,7 @@
         </mat-panel-title>
         <mat-panel-description class="description">
           <mat-chip-list aria-label="Property selection" class="chip-list">
-            <mat-chip *ngFor="let prop of tm.properties; index as j" class="chip white-border">
+            <mat-chip *ngFor="let prop of tm.properties; index as j" class="chip">
               <div class="chip-text">{{prop.func}}</div>
               <button matChipRemove [attr.aria-label]="'remove ' + prop.func" (click)="removeProperty(i, j)">
                 <mat-icon style="color: var(--gray);">close</mat-icon>
@@ -53,8 +49,12 @@
       </mat-expansion-panel-header>
       <div class="content">
         <app-animation-graph [type]="tm.type" [(points)]="tm.bezierPoints" (framesChange)="onFramesChanged($event, tm)"></app-animation-graph>
-        <app-animation-property-editor [properties]="tm.properties"></app-animation-property-editor>
+        <app-animation-property-editor [properties]="tm.properties" (propertyChange)="generateCssFrames()"></app-animation-property-editor>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <button mat-button class="create-button" (click)="addTimeMap()">
+    <mat-icon aria-hidden="false" aria-label="Add">add</mat-icon>
+    Create Time Graph
+  </button>
 </div>

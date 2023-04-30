@@ -26,8 +26,7 @@ export class SpringEditorComponent implements OnInit {
   public translation: any = {
     'initVelocity': 'NaN',
     'stiffness': 'Stiffness',
-    'dampener': 'Dampener',
-    'maxVelocity': 'Max Velocity'
+    'dampener': 'Dampener'
   }
 
   constructor() { }

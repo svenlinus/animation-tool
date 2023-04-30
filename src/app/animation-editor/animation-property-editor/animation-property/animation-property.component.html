@@ -2,45 +2,42 @@
   <div class="header">
     <h1>{{property.func}}</h1>
   </div>
-  <div>
-    <div class="property-settings">
-      <div class="input-row">
-        <div class="label">Start at</div>
-        <mat-form-field class="form-field number" appearance="fill">
-          <input matInput type="number" class="num-input" (change)="updateStart($event)" [value]="property.start">
-          <span matTextSuffix class="suffix">{{property.unit != 'none' ? property.unit : ''}}</span>
-        </mat-form-field>
-      </div>
-      <div class="input-row">
-        <div class="label">End at</div>
-        <mat-form-field class="form-field number" appearance="fill">
-          <input matInput type="number" class="num-input" (change)="updateEnd($event)" value={{property.end}}>
-          <span matTextSuffix class="suffix">{{property.unit != 'none' ? property.unit : ''}}</span>
-        </mat-form-field>
-      </div>
-      <div class="input-row">
-        <div class="label">Units</div>
-        <mat-form-field class="form-field select" appearance="fill" style="color:white" color="primary">
-          <mat-select (selectionChange)="updateUnit($event)" value="{{property.unit}}" class="unit-select">
-            <mat-option *ngFor="let unitOp of property.config.units" value={{unitOp}}>{{unitOp}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="input-row limit-checkbox">
-        <div class="label">Limit</div>
-        <mat-checkbox color="primary" [checked]="hasLimits" (input)="toggleLimits()"></mat-checkbox>
-      </div>
-      <div class="input-row limit-range" *ngIf="hasLimits">
-        <div class="label">between</div>
-        <mat-form-field class="form-field limit" appearance="fill" style="color:white" color="primary">
-          <input matInput type="number" class="num-input" (change)="updateLimitMin($event)" [value]="limitMin">
-        </mat-form-field>
-        <div class="label">and</div>
-        <mat-form-field class="form-field limit" appearance="fill" style="color:white" color="primary">
-          <input matInput type="number" class="num-input" (change)="updateLimitMax($event)" [value]="limitMax">
-        </mat-form-field>
-      </div>
+  <div class="property-settings">
+    <div class="input-row">
+      <div class="label">Start at</div>
+      <mat-form-field class="form-field number" appearance="fill">
+        <input matInput type="number" class="num-input" (change)="updateStart($event)" [value]="property.start">
+        <span matTextSuffix class="suffix">{{property.unit != 'none' ? property.unit : ''}}</span>
+      </mat-form-field>
+    </div>
+    <div class="input-row">
+      <div class="label">End at</div>
+      <mat-form-field class="form-field number" appearance="fill">
+        <input matInput type="number" class="num-input" (change)="updateEnd($event)" value={{property.end}}>
+        <span matTextSuffix class="suffix">{{property.unit != 'none' ? property.unit : ''}}</span>
+      </mat-form-field>
+    </div>
+    <div class="input-row">
+      <div class="label">Units</div>
+      <mat-form-field class="form-field select" appearance="fill" style="color:white" color="primary">
+        <mat-select (selectionChange)="updateUnit($event)" value="{{property.unit}}" class="unit-select">
+          <mat-option *ngFor="let unitOp of property.config.units" value={{unitOp}}>{{unitOp}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="input-row limit-checkbox">
+      <div class="label">Limit</div>
+      <mat-checkbox color="primary" [checked]="hasLimits" (input)="toggleLimits()"></mat-checkbox>
+    </div>
+    <div class="input-row limit-range" *ngIf="hasLimits">
+      <div class="label">between</div>
+      <mat-form-field class="form-field limit" appearance="fill" style="color:white" color="primary">
+        <input matInput type="number" class="num-input" (change)="updateLimitMin($event)" [value]="limitMin">
+      </mat-form-field>
+      <div class="label">and</div>
+      <mat-form-field class="form-field limit" appearance="fill" style="color:white" color="primary">
+        <input matInput type="number" class="num-input" (change)="updateLimitMax($event)" [value]="limitMax">
+      </mat-form-field>
     </div>
   </div>
-
 </div>

@@ -5,20 +5,35 @@
     margin-top: 10px;
   }
 
-  .create-button {
-    font-size: 16px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-align: center;
-    padding: 5px 12px;
-    background-color: var(--bgCard);
-    border: 1px solid rgba(255, 255, 255, 0.676) !important;
-    border-radius: 10px;
+  .create-container {
+    display: flex;
+    align-items: center;
     margin-top: 15px;
 
-    .mat-icon {
-      transform: translateY(-1px);
+    .create-button {
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      padding: 5px 12px;
+      background-color: var(--bgCard);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 10px;
+
+      .mat-icon {
+        transform: translateY(-1px);
+      }
+    }
+
+    .label {
+      margin-left: 20px;
+      font-size: 18px;
+    }
+
+    .slider {
+      margin-left: 10px;
+      flex-grow: 1;
     }
   }
 

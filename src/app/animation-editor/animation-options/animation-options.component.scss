@@ -2,4 +2,103 @@
   margin-bottom: 15px;
   min-height: 200px;
   background-color: var(--bgCard);
+  padding: 20px 20px 25px;
+  display: flex;
+  gap: 15px;
+  
+  .settings-container {
+    overflow: hidden;
+    width: 33%;
+
+    .header {
+      background-color: var(--bgInput);
+      padding: 10px 20px 10px;
+      overflow: hidden;
+      border-radius: 10px;
+  
+      h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+    }
+
+    .animation-settings {
+      margin:10px;
+      margin-left: 20px;
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 16px;
+
+        .label {
+          font-size: 18px;
+        }
+
+        .slider {
+          flex-grow: 1;
+          max-width: 100px;
+        }
+
+        .slide-toggle {
+          margin-left: 8px;
+        }
+
+        &.reverse {
+          margin-top: 12px;
+        }
+
+        .form-field {
+          transform: translateY(10px);
+          margin-left: 5px;
+
+          ::ng-deep {
+            .mat-form-field-wrapper {
+              padding-bottom: 1em;
+            }
+            .mat-form-field-flex {
+              background-color: var(--bgCard);
+              padding-top: 0;
+              padding-right: 0.1em;
+              padding-left: 0.4em;
+            }
+            .mat-form-field-infix {
+              border-top: 0;
+            }
+          }
+
+          &.number {
+            max-width: 64px;
+
+            .num-input {
+              width: 100%;
+            }
+            .suffix {
+              position: absolute;
+              color: var(--gray);
+              top: 18%;
+              left: 130%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .output {
+    background-color: var(--bgGraph);
+    border-radius: 10px;
+    width: 33%;
+    max-height: 206px;
+    padding: 30px;
+    padding-right: 0;
+    font-size: 18px;
+    line-height: 30px;
+
+    p {
+      display: inline-block;
+      margin: 0 !important;
+    }
+  }
 }

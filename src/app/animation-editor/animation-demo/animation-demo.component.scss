@@ -2,7 +2,6 @@
   max-width: 1270px;
   height: 284px;
   margin: 0 auto;
-  margin-bottom: 15px;
   color: white;
   background-color: var(--bgGraph);
   background-size: 40px 40px;
@@ -10,6 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 
   .demo-box {
     height: 100px;
@@ -18,8 +18,28 @@
     border: 4px solid var(--primary);
     z-index: 10;
   }
-
   .demo-box:hover {
     cursor: pointer;
+  }
+
+  .loader {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 20px;
+    aspect-ratio: 1;
+    transform: rotate(-45deg);
+    transform-origin: center;
+
+    .spinner {
+      border-radius: 200px;
+      border: 3px solid transparent;
+      border-top: 3px solid var(--primary);
+      position: absolute;
+      width: calc(100% - 6px);
+      aspect-ratio: 1;
+      top: 0;
+      left: 0;
+    }
   }
 }

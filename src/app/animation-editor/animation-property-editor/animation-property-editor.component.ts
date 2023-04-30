@@ -1,5 +1,5 @@
 import { AnimationProperty } from '../animation.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-animation-property-editor',
@@ -9,10 +9,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AnimationPropertyEditorComponent implements OnInit {
 
   @Input() public properties?: Array<AnimationProperty>;
+  @Output() public propertyChange = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  updateProperty() {
+    this.propertyChange.emit();
+  }
 }

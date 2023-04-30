@@ -9,7 +9,8 @@ export interface TimeMap {
 
 export interface PercentFrame {
   percent: number,
-  value: number
+  value: number,
+  insignificant?: boolean
 }
 
 export interface Limit {
@@ -26,10 +27,10 @@ export enum TimeMapType {
 }
 
 export enum CssFunction {     // to be continued
-  ScaleX = 'scaleX',
-  ScaleY = 'scaleY',
   TranslateX = 'translateX',
   TranslateY = 'translateY',
+  ScaleX = 'scaleX',
+  ScaleY = 'scaleY',
   Rotate = 'rotate',
   SkewX = 'skewX',
   SkewY = 'skewY',

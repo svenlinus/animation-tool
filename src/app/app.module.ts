@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import { AnimationEditorComponent } from './animation-editor/animation-editor.component';
 import { AnimationGraphComponent } from './animation-editor/animation-graph/animation-graph.component';
@@ -52,7 +53,8 @@ import { AnimationOptionsComponent } from './animation-editor/animation-options/
     MatSliderModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

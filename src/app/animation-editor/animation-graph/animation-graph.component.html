@@ -1,8 +1,12 @@
 <div class="graph-container">
   <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="onMouseLeave()"></div>
   <app-spring-editor *ngIf="type == 'Spring'" [config]="this.springConfig" (change)="updateSpringConfig($event)"></app-spring-editor>
-  <button mat-button class="create-button" (click)="sample()">
-    <mat-icon>segment</mat-icon>
-    Create Keyframes
-  </button>
+  <div class="create-container">
+    <button mat-button class="create-button" (click)="sample()">
+      <mat-icon>segment</mat-icon>
+      Create Keyframes
+    </button>
+    <div *ngIf="frames.length > 0" class="label">Compress</div>
+    <mat-slider *ngIf="frames.length > 0" min="0" max="1" step="0.01" [value]="compression" (input)="updateCompression($event)" (change)="emitFrames()" color="primary" class="slider" thumbLabel [displayWith]="formatLabel"></mat-slider>
+  </div>
 </div>

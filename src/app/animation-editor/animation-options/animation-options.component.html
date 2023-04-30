@@ -1,3 +1,36 @@
 <div class="container shadow-border">
-  
+  <div class="settings-container">
+    <div class="header">
+      <h1>Animation Settings</h1>
+    </div>
+    <div class="animation-settings">
+      <div class="input-row">
+        <div class="label">Duration</div>
+        <mat-form-field class="form-field number" appearance="fill">
+          <input matInput type="number" class="num-input" [value]="duration" (input)="updateDuration($event)">
+          <span matTextSuffix class="suffix">milliseconds</span>
+        </mat-form-field>
+      </div>
+      <div class="input-row">
+        <div class="label">Number of frames</div>
+        <mat-form-field class="form-field number" appearance="fill">
+          <input matInput type="number" class="num-input" [value]="numFrames" (change)="updateNumFrames($event)" [min]="8" [max]="40">
+        </mat-form-field>
+      </div>
+      <div class="input-row reverse">
+        <div class="label">Reverse</div>
+        <mat-slide-toggle class="slide-toggle" color="primary" [(ngModel)]="reversed" (change)="updateReversed()"></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div class="output" id="class-output">
+    <span style="color: #e8ffcb;">.demo-box&ensp;</span> &#123; <br>
+    <span style="color: #9ccdff;">&emsp;animation: </span> custom-anim linear; <br>
+    <span style="color: #9ccdff;">&emsp;animation-duration: </span> {{duration}}ms; <br>
+    <span style="color: #9ccdff;">&emsp;animation-direction: </span> {{direction}}; <br>
+    &#125;
+  </div>
+  <div class="output">
+
+  </div>
 </div>

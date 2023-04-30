@@ -17,7 +17,6 @@ export interface Dict {
 export interface SpringConfig extends Dict {
   stiffness: number;
   dampener: number;
-  maxVelocity: number;
   initVelocity: number;
 }
 

@@ -52,6 +52,7 @@
             background-color: var(--bgCard);
             padding-top: 0;
             padding-right: 0.1em;
+            padding-left: 0.4em;
           }
           .mat-form-field-infix {
             border-top: 0;
@@ -96,12 +97,6 @@
 
           .num-input {
             width: 100%;
-          }
-        }
-
-        ::ng-deep {
-          .mat-form-field-flex {
-            padding-left: 0.4em;
           }
         }
       }
