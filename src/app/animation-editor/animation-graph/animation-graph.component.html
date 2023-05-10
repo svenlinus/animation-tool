@@ -1,12 +1,17 @@
 <div class="graph-container">
   <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="onMouseLeave()"></div>
-  <app-spring-editor *ngIf="type == 'Spring'" [config]="this.springConfig" (change)="updateSpringConfig($event)"></app-spring-editor>
+  <app-spring-editor *ngIf="type == 'Spring'" [config]="springConfig" (change)="updateSpringConfig($event)"></app-spring-editor>
   <div class="create-container">
     <button mat-button class="create-button" (click)="sample()">
       <mat-icon>segment</mat-icon>
       Create Keyframes
     </button>
-    <div *ngIf="frames.length > 0" class="label">Compress</div>
-    <mat-slider *ngIf="frames.length > 0" min="0" max="1" step="0.01" [value]="compression" (input)="updateCompression($event)" (change)="emitFrames()" color="primary" class="slider" thumbLabel [displayWith]="formatLabel"></mat-slider>
+    <div *ngIf="frames.length > 0" class="compress" (mouseenter)="setDisplay(false)" (mouseleave)="setDisplay(true)">
+      <div class="label">Compress</div>
+      <mat-form-field class="form-field number" appearance="fill">
+        <input matInput type="number" class="num-input" [(ngModel)]="compression" (input)="updateCompression()" (change)="emitFrames()">
+      </mat-form-field>
+      <mat-slider min="0" max="100" step="1" [value]="compression" (input)="updateCompression($event)" (change)="emitFrames()" color="primary" class="slider"></mat-slider>
+    </div>
   </div>
 </div>

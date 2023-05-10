@@ -23,10 +23,11 @@ export class AnimationEditorComponent implements OnInit {
   public selectingType: boolean = false;
   public filteredCssFunctions!: Observable<Array<string>>;
   public chipControl = new FormControl('');
+  public cssFrames: string = '';
 
   @ViewChild('animationContainer') animationContainerRef!: ElementRef;
+  @ViewChild('description') description!: ElementRef;
 
-  private cssFrames: string = '';
   private defaultMap!: TimeMap;
   private closedFunctionsList: Array<string> = [];
   private cssFunctions: Array<string> = Object.values(CssFunction);
@@ -121,7 +122,7 @@ export class AnimationEditorComponent implements OnInit {
   }
 
   public generateCssFrames() {
-    this.cssFrames = '@keyframes anim {\n'
+    this.cssFrames = '@keyframes anim {\n '
     for (let i = 0; i < AnimationEditorComponent.numFrames + 1; i++) {
       const percent = Math.round(i/AnimationEditorComponent.numFrames * 1000) / 10;
       let significant = false;  // if all time maps have an insignificant frame at this position do not add a keyframe 
@@ -135,7 +136,7 @@ export class AnimationEditorComponent implements OnInit {
         }
       }
       if (keyframeString.length > 0 && significant) {
-        this.cssFrames += `${percent}% { transform: ${keyframeString}}\n`;
+        this.cssFrames += `${percent}% { transform: ${keyframeString}} \n`;
       }
     }
     this.cssFrames += '}'
@@ -155,8 +156,8 @@ export class AnimationEditorComponent implements OnInit {
     };
     cont?.animate([
       {transform: 'rotate(0)', visibility: 'visible'},
-      {transform: 'rotate(270deg)'},
-      {transform: 'rotate(270deg)', visibility: 'hidden'}
+      {transform: 'rotate(315deg)'},
+      {transform: 'rotate(315deg)', visibility: 'hidden'}
     ], opt);
     spinners.forEach((spin, i) => {
       const options: KeyframeAnimationOptions = {

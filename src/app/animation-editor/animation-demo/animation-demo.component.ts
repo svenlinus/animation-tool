@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-animation-demo',
@@ -12,7 +12,6 @@ export class AnimationDemoComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 
   public playAnimation() {
     this.demoBoxRef.nativeElement.style = '';

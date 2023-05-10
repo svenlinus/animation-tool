@@ -1,5 +1,5 @@
 <div class="container">
-  <app-animation-options></app-animation-options>
+  <app-animation-options [frames]="cssFrames"></app-animation-options>
   <div #animationContainer></div>
   <app-animation-demo></app-animation-demo>
   <mat-accordion>
@@ -16,15 +16,17 @@
             <mat-option *ngFor="let type of mapTypes" [value]="type" class="type-option">{{type}}</mat-option>
           </mat-select>
         </mat-panel-title>
-        <mat-panel-description class="description">
-          <mat-chip-list aria-label="Property selection" class="chip-list">
-            <mat-chip *ngFor="let prop of tm.properties; index as j" class="chip">
-              <div class="chip-text">{{prop.func}}</div>
-              <button matChipRemove [attr.aria-label]="'remove ' + prop.func" (click)="removeProperty(i, j)">
-                <mat-icon style="color: var(--gray);">close</mat-icon>
-              </button>
-            </mat-chip>
-          </mat-chip-list>
+        <mat-panel-description class="description" [style.overflow]="description.clientWidth > 500 ? 'auto' : 'hidden'">
+          <div #description>
+            <mat-chip-list aria-label="Property selection" class="chip-list">
+              <mat-chip *ngFor="let prop of tm.properties; index as j" class="chip">
+                <div class="chip-text">{{prop.func}}</div>
+                <button matChipRemove [attr.aria-label]="'remove ' + prop.func" (click)="removeProperty(i, j)">
+                  <mat-icon style="color: var(--gray);">close</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
           <mat-form-field class="example-full-width" appearance="fill" 
                           class="add-property-form" 
                           (mouseenter)="setSelectingType(true)" 

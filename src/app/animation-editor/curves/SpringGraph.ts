@@ -18,13 +18,12 @@ export class SpringGraph implements Graph {
   constructor(private component: AnimationGraphComponent) {
   }
   public sample(): PercentFrame[] {
-    const comp = this.component;
-    const result = new Array(AnimationEditorComponent.numFrames + 1);
-    for (let i = 0; i < result.length-1; i ++) {
+    const result: Array<PercentFrame> = new Array(AnimationEditorComponent.numFrames);
+    for (let i = 0; i < result.length; i ++) {
       const percent = i / result.length;
       result[i] = {percent, value: this.valueAt(percent).p};
     }
-    result[result.length - 1] = {percent: 1, value: this.endPoint};
+    result.push({percent: 1, value: this.endPoint});
     return result;
   }
   public setup() {
@@ -95,7 +94,6 @@ export class SpringGraph implements Graph {
     this.points = [];
     let iter = 0;
     const exitPoint = 0.002;
-    const sample = 2;
     while (iter < 1000) {
       this.points.push({p: this.pos, v: this.vel, a: this.acc});
       this.springEquation();
@@ -123,7 +121,7 @@ export class SpringGraph implements Graph {
       initVelocity: this.initVelocity
     }
   }
-  public valueAt(x: number): SpringPoint {
+  private valueAt(x: number): SpringPoint {
     const i = Math.floor(x * (this.points.length - 0.99));
     const p1 = this.points[i];
     const p2 = this.points[i + 1];
@@ -131,7 +129,7 @@ export class SpringGraph implements Graph {
     return {
       p: Interpolate.lerp(p1.p, p2?.p, t),
       v: Interpolate.lerp(p1.v, p2?.v, t),
-      a: Interpolate.lerp(p1.a, p2?.a, t),
+      a: Interpolate.lerp(p1.a, p2?.a, t)
     }
   }
 }

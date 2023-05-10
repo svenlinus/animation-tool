@@ -131,6 +131,20 @@
         }
       }
 
+      .description::-webkit-scrollbar {
+        height: 5px;
+      }
+      
+      .description::-webkit-scrollbar-track {
+        background-color: none;
+        border-radius: 5px;
+      }
+      
+      .description::-webkit-scrollbar-thumb {
+        background-color: rgb(25, 33, 42);
+        border-radius: 5px;
+      }
+
       .close-button {
         background-color: transparent;
         border: none;

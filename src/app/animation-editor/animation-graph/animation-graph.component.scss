@@ -25,15 +25,42 @@
         transform: translateY(-1px);
       }
     }
-
-    .label {
-      margin-left: 20px;
-      font-size: 18px;
-    }
-
-    .slider {
-      margin-left: 10px;
+    .compress {
+      display: flex;
+      align-items: center;
       flex-grow: 1;
+
+      .label {
+        margin-left: 20px;
+        font-size: 18px;
+      }
+
+      .form-field {
+        transform: translateY(10px);
+        margin-left: 5px;
+        max-width: 50px;
+
+        ::ng-deep {
+          .mat-form-field-wrapper {
+            padding-bottom: 1em;
+          }
+          .mat-form-field-flex {
+            background-color: var(--bgCard);
+            padding-top: 0;
+            padding-right: 0.1em;
+            padding-left: 0.4em;
+          }
+          .mat-form-field-infix {
+            border-top: 0;
+          }
+        }
+      }
+
+      .slider {
+        margin-left: 10px;
+        flex-grow: 1;
+        min-width: 0;
+      }
     }
   }
 

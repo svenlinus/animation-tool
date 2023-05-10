@@ -60,7 +60,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public keys: Array<boolean> = [];
   public springConfig!: SpringConfig;
   public inFocus: boolean = false;
-  public compression: number = 0.1;
+  public compression: number = 0;
   public frames: Array<PercentFrame> = [];
   
   private canvas: any;
@@ -112,7 +112,6 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
       };
 
       s.mouseMoved = () => {
-        this.displayCurve = true;
         display();
       }
 
@@ -172,18 +171,21 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   }
 
   private compressFrames() {
-    for (let i = 0; i < this.frames.length; i ++) {
-      this.frames[i].insignificant = undefined;
+    for (let i = 1; i < this.frames.length - 1; i ++) {
+      this.frames[i].insignificant = true;
     }
-    for (let i = 0, j = 1; i < this.frames.length - 2; i ++, j = i + 1) {
-      let past = this.frames[i],
-          current = this.frames[j],
-          next = this.frames[j + 1];
-      while (j < this.frames.length - 1 && Math.abs(this.slopeBetween(past, current) - this.slopeBetween(current, next)) < this.compression) {
-        current.insignificant = true;
-        j ++;
-        current = this.frames[j];
-        next = this.frames[j + 1];
+    for (let i = 1; i < this.frames.length - 1; i ++) {
+      let past = this.frames[i - 1],
+          current = this.frames[i],
+          next = this.frames[i + 1];
+      let sbpc = this.slopeBetween(past, current),
+          sbcn = this.slopeBetween(current, next);
+      if (Math.abs(sbpc - sbcn) >= this.compression * 3/100) {
+        past.insignificant = false;
+        current.insignificant = false;
+        next.insignificant = false;
+      } else if (Math.sign(sbpc) != Math.sign(sbcn)) {
+        current.insignificant = false;
       }
     }
   }
@@ -192,14 +194,11 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
     return (f2.value - f1.value) / (f2.percent - f1.percent);
   }
 
-  public formatLabel(value: number): string {
-    return `${Math.round(value*100)}`;
-  }
-
-  public updateCompression(event: any) {
-    this.compression = event.value;
-    this.displayCurve = false;
+  public updateCompression(event?: any) {
+    this.compression = event ? event.value : this.compression;
+    if (this.compression < 0) this.compression = 0;
     this.compressFrames();
+    this.p5.mouseMoved();
   }
 
   public emitFrames() {
@@ -219,6 +218,10 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public updateSpringConfig(val: SpringConfig) {
     this.springConfig = val;
     (this.curve as SpringGraph).setConfig(val);
+  }
+
+  public setDisplay(val: boolean) {
+    this.displayCurve = val;
   }
 
   public onMouseLeave() {

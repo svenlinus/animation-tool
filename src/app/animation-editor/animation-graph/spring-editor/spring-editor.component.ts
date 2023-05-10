@@ -15,8 +15,10 @@ export class SpringEditorComponent implements OnInit {
 
   @Input() set config(val: SpringConfig) {
     this._config = val;
-    this.configValues = Object.values(this._config);
-    this.configKeys = Object.keys(this._config).map(k => this.translation[k]);
+    if (val) {
+      this.configValues = Object.values(this._config).slice(0, -1);
+      this.configKeys = Object.keys(this._config).map(k => this.translation[k]);
+    }
   }
   get config(): SpringConfig {
     return this._config;
@@ -32,8 +34,10 @@ export class SpringEditorComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.configValues = Object.values(this.config);
-    this.configKeys = Object.keys(this.config).map(k => this.translation[k]);
+    if (this.config) {
+      this.configValues = Object.values(this.config).slice(0, -1);
+      this.configKeys = Object.keys(this.config).map(k => this.translation[k]);
+    }
   }
 
   updateConfig(event: any, index: number) {
