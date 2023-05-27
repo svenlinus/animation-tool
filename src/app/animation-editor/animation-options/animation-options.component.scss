@@ -122,11 +122,31 @@
         content: "";
         position: absolute;
         width: 100%;
-        height: 40px;
+        height: 60px;
         background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--bgGraph) 80%);
         bottom: 0;
         left: 0;
       }
     }
+    .copy-button {
+      transform: translateY(-100px);
+      transition: transform 200ms;
+      position: absolute;
+      top: 0;
+      right: 0;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      color: var(--gray);
+
+      ::ng-deep {
+        .mat-icon {
+          transform: scale(0.8) translateY(-1px);
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+  .output:hover .copy-button {
+    transform: translateY(0);
   }
 }

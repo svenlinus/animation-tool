@@ -17,7 +17,7 @@ export class AnimationDemoComponent implements OnInit {
     this.demoBoxRef.nativeElement.style = '';
     void this.demoBoxRef.nativeElement.offsetWidth;
     setTimeout(() => {
-      this.demoBoxRef.nativeElement.style = 'animation: anim 1s linear;';
+      this.demoBoxRef.nativeElement.style = 'animation: custom-anim 1s linear;';
     }, 100);
   }
 

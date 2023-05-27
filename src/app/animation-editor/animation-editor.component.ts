@@ -122,7 +122,7 @@ export class AnimationEditorComponent implements OnInit {
   }
 
   public generateCssFrames() {
-    this.cssFrames = '@keyframes anim {\n '
+    this.cssFrames = '@keyframes custom-anim {\n '
     for (let i = 0; i < AnimationEditorComponent.numFrames + 1; i++) {
       const percent = Math.round(i/AnimationEditorComponent.numFrames * 1000) / 10;
       let significant = false;  // if all time maps have an insignificant frame at this position do not add a keyframe 
@@ -145,6 +145,9 @@ export class AnimationEditorComponent implements OnInit {
     console.warn(this.cssFrames);
   }
 
+  public updateAnimationClass(val: string) {
+    this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + val + '</style>';
+  }
 
   public loadAnimation() {
     const spinners = document.querySelectorAll('.spinner');

@@ -1,5 +1,5 @@
 import { AnimationEditorComponent } from './../animation-editor.component';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-animation-options',
@@ -9,10 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AnimationOptionsComponent implements OnInit {
   private _frames?: string;
   @Input() set frames(val: string) {
+    this._frames = val;
     const txt = this.formatOutput(val);
     const out = document.getElementById('keyframe-output');
     if (out) out.innerHTML = txt;
   }
+  @Output() private classChange = new EventEmitter<string>();
 
   public duration: number = 100;
   public direction: string = 'normal';
@@ -23,6 +25,21 @@ export class AnimationOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  public copyFrames() {
+    navigator.clipboard.writeText(this._frames || '');
+  }
+
+  private createClassString(): string {
+    return `.demo-box {\t
+      animation: custom-anim linear;\t
+      animation-duration: ${this.duration}ms;\t
+      animation-direction: ${this.direction};\n}`
+  }
+
+  public copyClass() {
+    navigator.clipboard.writeText(this.createClassString());
   }
 
   private formatOutput(cssFrames: string): string {
@@ -62,13 +79,16 @@ export class AnimationOptionsComponent implements OnInit {
   public updateNumFrames(event: any) {
     const num = Number(event.target.value || 0);
     this.numFrames = num < 8 ? 8 : (num > 40 ? 40 : num);
+    this.classChange.emit(this.createClassString());
   }
 
   public updateDuration(event: any) {
     this.duration = Number(event.target.value);
+    this.classChange.emit(this.createClassString());
   }
 
   public updateReversed() {
     this.direction = this.reversed ? 'reverse' : 'normal';
+    this.classChange.emit(this.createClassString());
   }
 }

@@ -1,5 +1,5 @@
 <div class="container">
-  <app-animation-options [frames]="cssFrames"></app-animation-options>
+  <app-animation-options [frames]="cssFrames" (classChange)="updateAnimationClass($event)"></app-animation-options>
   <div #animationContainer></div>
   <app-animation-demo></app-animation-demo>
   <mat-accordion>

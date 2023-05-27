@@ -29,8 +29,10 @@
     <span style="color: #9ccdff;">&emsp;animation-duration: </span> {{duration}}ms; <br>
     <span style="color: #9ccdff;">&emsp;animation-direction: </span> {{direction}}; <br>
     &#125;
+    <button mat-button class="copy-button" (click)="copyClass()"><mat-icon>content_copy</mat-icon>Copy to clipboard</button>
   </div>
   <div class="output">
     <div id="keyframe-output"></div>
+    <button mat-button class="copy-button" (click)="copyFrames()"><mat-icon>content_copy</mat-icon>Copy to clipboard</button>
   </div>
 </div>
