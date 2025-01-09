@@ -15,7 +15,4 @@ export class CustomGraph implements Graph {
     const comp = this.component;
     const s = comp.p5;
   }
-  public add() {
-    const comp = this.component;
-  }
 }

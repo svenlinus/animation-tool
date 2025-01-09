@@ -25,6 +25,8 @@ import { AnimationPropertyComponent } from './animation-editor/animation-propert
 import { AnimationDemoComponent } from './animation-editor/animation-demo/animation-demo.component';
 import { AnimationOptionsComponent } from './animation-editor/animation-options/animation-options.component';
 import { PhysicsEditorComponent } from './animation-editor/animation-graph/physics-editor/physics-editor.component';
+import { CustomEditorComponent } from './animation-editor/animation-graph/custom-editor/custom-editor.component';
+import { CodeEditorModule } from '@ngstack/code-editor';
 
 
 @NgModule({
@@ -36,12 +38,14 @@ import { PhysicsEditorComponent } from './animation-editor/animation-graph/physi
     AnimationPropertyComponent,
     PhysicsEditorComponent,
     AnimationDemoComponent,
-    AnimationOptionsComponent
+    AnimationOptionsComponent,
+    CustomEditorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    CodeEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     MatExpansionModule,

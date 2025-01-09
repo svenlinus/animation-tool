@@ -1,0 +1,16 @@
+.container {
+  padding: 0;
+  width: 500px;
+  display: flex;
+
+  .script-input {
+    width: 100% !important;
+    
+    ::ng-deep {
+      .mat-form-field-flex {
+        background-color: var(--bgColor);
+      }
+    }
+    
+  }
+}

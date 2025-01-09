@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SpringConfig } from '../../curve.model';
 
 @Component({
   selector: 'app-physics-editor',

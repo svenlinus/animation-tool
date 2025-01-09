@@ -2,6 +2,7 @@
   <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="onMouseLeave()"></div>
   <app-physics-editor *ngIf="type == 'Spring'" [config]="springConfig" (change)="updateSpringConfig($event)"></app-physics-editor>
   <app-physics-editor *ngIf="type == 'Gravity'" [config]="gravityConfig" (change)="updateGravityConfig($event)"></app-physics-editor>
+  <app-custom-editor *ngIf="type == 'Custom'"></app-custom-editor>
   <div class="create-container">
     <button mat-button class="create-button" (click)="sample()">
       <mat-icon>segment</mat-icon>
