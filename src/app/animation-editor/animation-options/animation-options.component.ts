@@ -16,9 +16,9 @@ export class AnimationOptionsComponent implements OnInit {
   }
   @Output() private classChange = new EventEmitter<string>();
 
-  public duration: number = 100;
+  public duration: number = 1000;
   public direction: string = 'normal';
-  public numFrames: number = AnimationEditorComponent.numFrames;
+  public numFrames: number = AnimationEditorComponent.numFrames + 1;
   public reversed: boolean = false;
 
   constructor() {
@@ -78,7 +78,8 @@ export class AnimationOptionsComponent implements OnInit {
 
   public updateNumFrames(event: any) {
     const num = Number(event.target.value || 0);
-    this.numFrames = num < 8 ? 8 : (num > 40 ? 40 : num);
+    this.numFrames = num < 4 ? 4 : (num > 128 ? 128 : num);
+    AnimationEditorComponent.numFrames = this.numFrames - 1;
     this.classChange.emit(this.createClassString());
   }
 

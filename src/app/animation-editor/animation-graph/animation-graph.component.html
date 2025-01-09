@@ -8,7 +8,7 @@
       Create Keyframes
     </button>
     <div *ngIf="frames.length > 0" class="compress" (mouseenter)="setDisplay(false)" (mouseleave)="setDisplay(true)">
-      <div class="label">Quality</div>
+      <div class="label">Compress</div>
       <mat-form-field class="form-field number" appearance="fill">
         <input matInput type="number" class="num-input" [(ngModel)]="compression" (input)="updateCompression()" (change)="emitFrames()">
       </mat-form-field>

@@ -15,7 +15,7 @@ import { map, Observable, startWith } from 'rxjs';
   `],
 })
 export class AnimationEditorComponent implements OnInit {
-  public static numFrames: number = 20;
+  public static numFrames: number = 63;
 
   public timeMaps: Array<TimeMap> = [];
   public panelDescriptions: Array<string> = [];
@@ -31,6 +31,10 @@ export class AnimationEditorComponent implements OnInit {
   private defaultMap!: TimeMap;
   private closedFunctionsList: Array<string> = [];
   private cssFunctions: Array<string> = Object.values(CssFunction);
+  private demoBoxClass: String = `.demo-box {\t
+      animation: custom-anim linear;\t
+      animation-duration: 1000ms;\t
+      animation-direction: normal;\n}`;
 
   constructor() {
   }
@@ -111,7 +115,6 @@ export class AnimationEditorComponent implements OnInit {
 
   public onFramesChanged(frames: Array<PercentFrame>, timeMap: TimeMap) {
     timeMap.frames = frames;
-    console.warn(frames);
     this.generateCssFrames();
   }
 
@@ -140,12 +143,12 @@ export class AnimationEditorComponent implements OnInit {
       }
     }
     this.cssFrames += '}\n'
-    this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + '</style>';
+    this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + this.demoBoxClass + '</style>';
     this.loadAnimation();
-    console.warn(this.cssFrames);
   }
 
   public updateAnimationClass(val: string) {
+    this.demoBoxClass = val;
     this.animationContainerRef.nativeElement.innerHTML = '<style>' + this.cssFrames + val + '</style>';
   }
 

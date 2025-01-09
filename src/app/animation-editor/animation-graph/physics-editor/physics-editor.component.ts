@@ -47,7 +47,6 @@ export class PhysicsEditorComponent implements OnInit {
   updateConfig(event: any, index: number) {
     const key: string = Object.keys(this._config)[index];
     this.config[key] = event.value;
-    console.log(this.config);
     this.change.emit(this.config);
   }
 

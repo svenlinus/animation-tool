@@ -15,9 +15,10 @@ export class AnimationDemoComponent implements OnInit {
 
   public playAnimation() {
     this.demoBoxRef.nativeElement.style = '';
+    this.demoBoxRef.nativeElement.classList.remove('demo-box');
     void this.demoBoxRef.nativeElement.offsetWidth;
     setTimeout(() => {
-      this.demoBoxRef.nativeElement.style = 'animation: custom-anim 1s linear;';
+      this.demoBoxRef.nativeElement.classList.add('demo-box');
     }, 100);
   }
 

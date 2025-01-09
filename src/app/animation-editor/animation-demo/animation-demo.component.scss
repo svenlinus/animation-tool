@@ -5,20 +5,20 @@
   color: white;
   background-color: var(--bgGraph);
   background-size: 40px 40px;
-  background-image: radial-gradient(circle, #ffffff23 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #ffffff3f 1px, rgba(0, 0, 0, 0) 1px);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 
-  .demo-box {
+  .demo-box-shape {
     height: 100px;
     width: 100px;
     background-color: var(--primaryDim);
     border: 4px solid var(--primary);
     z-index: 10;
   }
-  .demo-box:hover {
+  .demo-box-shape:hover {
     cursor: pointer;
   }
 

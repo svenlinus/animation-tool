@@ -65,7 +65,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public springConfig!: SpringConfig;
   public gravityConfig!: GravityConfig;
   public inFocus: boolean = false;
-  public compression: number = 0;
+  public compression: number = 25;
   public frames: Array<PercentFrame> = [];
   
   private canvas: any;
@@ -138,7 +138,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
           if (!frame.insignificant)
             s.fill(255, 200);
           else
-            s.fill(255, 60);
+            s.fill(255, 40);
           s.noStroke();
           s.circle(pos.x, pos.y, 5);
         }
@@ -175,54 +175,44 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
     this.emitFrames();
   }
 
-  private compressFrames() {
-    const extrema = [0];
-    let currentExtrema = 0;
-    let currentIndex = 0;
-
-    for (let i = 1; i < this.frames.length - 1; i ++) {
-      let past = this.frames[i - 1],
-          current = this.frames[i],
-          next = this.frames[i + 1];
-      let sbpc = this.slopeBetween(past, current),
-          sbcn = this.slopeBetween(current, next);
-      if (Math.sign(sbpc) != Math.sign(sbcn))
-        extrema.push(i);
-      current.insignificant = true;
-    }
-    extrema.push(this.frames.length - 1);
-
-    for (let i = 1; i < this.frames.length - 1; i ++) {
-      const distanceToExtrema = Math.abs(currentExtrema - i);
-      if (distanceToExtrema <= this.compression)
-        this.frames[i].insignificant = false;
-      if (i > currentExtrema + this.compression)
-        currentExtrema = extrema[++currentIndex];
-    }
-
-
-    return;
-    for (let i = 1; i < this.frames.length - 1; i ++) {
-      this.frames[i].insignificant = true;
-    }
-    for (let i = 1; i < this.frames.length - 1; i ++) {
-      let past = this.frames[i - 1],
-          current = this.frames[i],
-          next = this.frames[i + 1];
-      let sbpc = this.slopeBetween(past, current),
-          sbcn = this.slopeBetween(current, next);
-      if (Math.abs(sbpc - sbcn) >= this.compression * 3/100) {
-        past.insignificant = false;
-        current.insignificant = false;
-        next.insignificant = false;
-      } else if (Math.sign(sbpc) != Math.sign(sbcn)) {
-        current.insignificant = false;
+  private douglasPeucker(points: PercentFrame[], epsilon: number) {
+    if (points.length < 2 || epsilon == 0) return;
+  
+    // Find the point with the maximum distance from the line
+    const start = points[0];
+    const end = points[points.length - 1];
+    const line = [end.percent - start.percent, end.value - start.value];
+    const lineLength = Math.sqrt(line[0] ** 2 + line[1] ** 2);
+  
+    let maxDistSq = 0;
+    let maxDistanceIdx = 0;
+  
+    for (let i = 1; i < points.length - 1; i++) {
+      const point = points[i];
+      const projection = ((point.percent - start.percent) * line[0] + (point.value - start.value) * line[1]) / lineLength;
+      const closest = [start.percent + projection * line[0] / lineLength, start.value + projection * line[1] / lineLength];
+      const distSq = (point.percent - closest[0]) ** 2 + (point.value - closest[1]) ** 2;
+  
+      if (distSq > maxDistSq) {
+        maxDistSq = distSq;
+        maxDistanceIdx = i;
       }
+    }
+
+    // If the max distance is greater than epsilon, recursively simplify
+    if (maxDistSq > epsilon * epsilon) {
+      this.douglasPeucker(points.slice(0, maxDistanceIdx + 1), epsilon);
+      this.douglasPeucker(points.slice(maxDistanceIdx), epsilon);
+    } else {
+      for (let i = 1; i < points.length-1; i++)
+          points[i].insignificant = true;
     }
   }
 
-  private slopeBetween(f1: PercentFrame, f2: PercentFrame) {
-    return (f2.value - f1.value) / (f2.percent - f1.percent);
+  private compressFrames() {
+    for (const frame of this.frames)
+      frame.insignificant = false;
+    this.douglasPeucker(this.frames, this.compression * 0.0002);
   }
 
   public updateCompression(event?: any) {
