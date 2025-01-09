@@ -98,7 +98,6 @@ export class GravityGraph implements Graph {
     this.bounceCount = 0;
     this.points = [];
     let iter = 0;
-    const exitPoint = 0.002;
     while (iter < 1000) {
       this.points.push({p: this.pos, v: this.vel, a: this.acc});
       this.gravityEquation();
@@ -136,14 +135,14 @@ export class GravityGraph implements Graph {
     }
   }
   private valueAt(x: number): PhysicsPoint {
-    const i = Math.floor(x * (this.points.length - 0.99));
+    const pointLocation = x * (this.points.length - 1);
+    const i = Math.floor(pointLocation);
     const p1 = this.points[i];
     const p2 = this.points[i + 1];
-    const t = (x * this.points.length - i);
     return {
-      p: Interpolate.lerp(p1.p, p2?.p, t),
-      v: Interpolate.lerp(p1.v, p2?.v, t),
-      a: Interpolate.lerp(p1.a, p2?.a, t)
+      p: Interpolate.lerp(p1.p, p2.p, pointLocation - i),
+      v: p1.v,
+      a: p1.a
     }
   }
 }
