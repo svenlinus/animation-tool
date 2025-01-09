@@ -2,18 +2,22 @@ import { AnimationEditorComponent } from '../animation-editor.component';
 import { AnimationGraphComponent } from '../animation-graph/animation-graph.component';
 import { PercentFrame } from '../animation.model';
 import { Interpolate, Point } from '../geometry';
-import { Graph, SpringConfig, PhysicsPoint } from '../curve.model';
+import { Graph, GravityConfig, PhysicsPoint, SpringConfig } from '../curve.model';
 
-export class SpringGraph implements Graph {
-  public initVelocity: number = 0.1;
-  public stiffness: number = 0.1;
-  public dampener: number = 0.1;
-  public endPoint: number = 1;
+export class GravityGraph implements Graph {
+  public initVelocity: number = 0.15;
+  public gravity: number = 0.1;
+  public drag: number = 0.1;
+  public elasticity: number = 0.5;
+  public bounces: number = 2;
+  public endPoint: number = 0;
   public points: Array<PhysicsPoint> = [];
+
   private pos: number = 0;
   private vel!: number;
   private acc!: number;
   private cp: Array<Point> = [new Point(0, this.initVelocity), new Point(1, this.endPoint)];   // control points
+  private bounceCount = 0;
 
   constructor(private component: AnimationGraphComponent) {
   }
@@ -28,7 +32,7 @@ export class SpringGraph implements Graph {
   }
   public setup() {
     this.generatePoints();
-    this.component.springConfig = this.getConfig();
+    this.component.gravityConfig = this.getConfig();
   }
   public draw() {
     const comp = this.component;
@@ -80,44 +84,54 @@ export class SpringGraph implements Graph {
     s.stroke('#2f75ff');
     s.beginShape();
     let p = new Point(0, this.points[0].p).worldToScreen();
-    s.vertex(p.x, p.y)
     for(let i = 0; i < this.points.length; i ++) {
-      p = new Point(i/this.points.length, this.points[i].p).worldToScreen();
-      s.curveVertex(p.x, p.y);
+      p = new Point(i/(this.points.length-1), this.points[i].p).worldToScreen();
+      s.vertex(p.x, p.y);
     }
-    s.vertex(p.x, p.y)
+    p = new Point(1, this.endPoint).worldToScreen();
+    s.vertex(p.x, p.y);
     s.endShape();
   }
   private generatePoints() {
     this.vel = this.initVelocity;
     this.pos = 0;
+    this.bounceCount = 0;
     this.points = [];
     let iter = 0;
     const exitPoint = 0.002;
     while (iter < 1000) {
       this.points.push({p: this.pos, v: this.vel, a: this.acc});
-      this.springEquation();
+      this.gravityEquation();
       iter ++;
-      if (Math.abs(this.vel) <= exitPoint && Math.abs(this.endPoint-this.pos) <= exitPoint && iter > 20) {
+      if (this.bounceCount > this.bounces)
         break;
-      }
     }
   }
-  private springEquation() {
-    this.acc = (this.stiffness * (this.endPoint-this.pos)) - (this.dampener * this.vel);
+  private gravityEquation() {
+    const drag = this.vel * this.vel / 2;
+    this.acc = -this.gravity / 10;
     this.vel += this.acc;
     this.pos += this.vel;
+    if (this.pos < 0) {
+      this.pos = 0;
+      this.vel *= -this.elasticity;
+      this.bounceCount ++;
+    }
   }
-  public setConfig(config: SpringConfig) {
-    this.stiffness = config.stiffness;
-    this.dampener = config.dampener;
+  public setConfig(config: GravityConfig) {
+    this.gravity = config.gravity;
+    this.drag = config.drag;
+    this.elasticity = config.elasticity;
+    this.bounces = config.bounces;
     this.initVelocity = config.initVelocity;
     this.generatePoints();
   }
-  public getConfig(): SpringConfig {
+  public getConfig(): GravityConfig {
     return {
-      stiffness: this.stiffness,
-      dampener: this.dampener,
+      gravity: this.gravity,
+      drag: this.drag,
+      elasticity: this.elasticity,
+      bounces: this.bounces,
       initVelocity: this.initVelocity
     }
   }

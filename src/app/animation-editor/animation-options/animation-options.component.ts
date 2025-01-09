@@ -43,7 +43,7 @@ export class AnimationOptionsComponent implements OnInit {
   }
 
   private formatOutput(cssFrames: string): string {
-    const tokens = cssFrames.split(' ');
+    const tokens = cssFrames.split(/\t| /);
     const green = '#e8ffcb',
           blue = '#9ccdff',
           purple = '#9c9eff';
@@ -54,8 +54,8 @@ export class AnimationOptionsComponent implements OnInit {
         case '@keyframes':
           output += `<span style="color: ${green}">@keyframes </span>`;
           break;
-        case 'anim':
-          output += `<span style="color: ${purple}">anim </span>`;
+        case 'custom-anim':
+          output += `<span style="color: ${purple}">custom-anim </span>`;
           break;
         case 'transform:':
           output += `<span style="color: ${blue}">transform: </span>`;

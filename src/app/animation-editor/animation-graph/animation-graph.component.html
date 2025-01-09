@@ -1,13 +1,14 @@
 <div class="graph-container">
   <div id={{canvasId}} class="canvas-container" (mouseenter)="setFocus(true)" (mouseleave)="onMouseLeave()"></div>
-  <app-spring-editor *ngIf="type == 'Spring'" [config]="springConfig" (change)="updateSpringConfig($event)"></app-spring-editor>
+  <app-physics-editor *ngIf="type == 'Spring'" [config]="springConfig" (change)="updateSpringConfig($event)"></app-physics-editor>
+  <app-physics-editor *ngIf="type == 'Gravity'" [config]="gravityConfig" (change)="updateGravityConfig($event)"></app-physics-editor>
   <div class="create-container">
     <button mat-button class="create-button" (click)="sample()">
       <mat-icon>segment</mat-icon>
       Create Keyframes
     </button>
     <div *ngIf="frames.length > 0" class="compress" (mouseenter)="setDisplay(false)" (mouseleave)="setDisplay(true)">
-      <div class="label">Compress</div>
+      <div class="label">Quality</div>
       <mat-form-field class="form-field number" appearance="fill">
         <input matInput type="number" class="num-input" [(ngModel)]="compression" (input)="updateCompression()" (change)="emitFrames()">
       </mat-form-field>

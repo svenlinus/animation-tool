@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="inputs">
+    <div *ngFor="let val of configValues; index as i" class="row">
+      <div *ngIf="configKeys[i] != 'NaN'" class="content">
+        <div class="label">{{configKeys[i]}}</div>
+        <mat-slider *ngIf="configKeys[i] != 'Bounces'" min="0" max="1" step="0.01" [value]="val" (input)="updateConfig($event, i)" color="primary" class="slider" thumbLabel [displayWith]="formatLabel"></mat-slider>
+        <mat-slider *ngIf="configKeys[i] == 'Bounces'" min="0" max="10" step="1" [value]="val" (input)="updateConfig($event, i)" color="primary" class="slider" thumbLabel></mat-slider>
+      </div>
+    </div>
+  </div>
+</div>

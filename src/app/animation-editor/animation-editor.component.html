@@ -1,3 +1,8 @@
+<link
+  href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+  rel="stylesheet"
+/>
+
 <div class="container">
   <app-animation-options [frames]="cssFrames" (classChange)="updateAnimationClass($event)"></app-animation-options>
   <div #animationContainer></div>
@@ -9,6 +14,7 @@
           <div class="graph-icon">
             <mat-icon *ngIf="tm.type == 'Bezier' || tm.type == 'Polynomial'" style="color: white;">insights</mat-icon>
             <mat-icon *ngIf="tm.type == 'Spring'" style="color: white;">expand</mat-icon>
+            <mat-icon *ngIf="tm.type == 'Gravity'" fontSet="material-icons-outlined" style="color: white;">swipe_down_alt</mat-icon>
             <mat-icon *ngIf="tm.type == 'Linear'" style="color: white;">timeline</mat-icon>
             <mat-icon *ngIf="tm.type == 'Custom'" style="color: white;">code</mat-icon>
           </div>

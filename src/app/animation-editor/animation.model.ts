@@ -21,6 +21,7 @@ export interface Limit {
 export enum TimeMapType {
   Bezier = 'Bezier',
   Spring = 'Spring',
+  Gravity = 'Gravity',
   Linear = 'Linear',
   Polynomial = 'Polynomial',
   Custom = 'Custom',

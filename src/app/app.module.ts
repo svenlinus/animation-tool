@@ -1,4 +1,3 @@
-import { SpringEditorComponent } from './animation-editor/animation-graph/spring-editor/spring-editor.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -17,7 +16,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AnimationEditorComponent } from './animation-editor/animation-editor.component';
 import { AnimationGraphComponent } from './animation-editor/animation-graph/animation-graph.component';
@@ -25,6 +24,7 @@ import { AnimationPropertyEditorComponent } from './animation-editor/animation-p
 import { AnimationPropertyComponent } from './animation-editor/animation-property-editor/animation-property/animation-property.component';
 import { AnimationDemoComponent } from './animation-editor/animation-demo/animation-demo.component';
 import { AnimationOptionsComponent } from './animation-editor/animation-options/animation-options.component';
+import { PhysicsEditorComponent } from './animation-editor/animation-graph/physics-editor/physics-editor.component';
 
 
 @NgModule({
@@ -34,7 +34,7 @@ import { AnimationOptionsComponent } from './animation-editor/animation-options/
     AnimationGraphComponent,
     AnimationPropertyEditorComponent,
     AnimationPropertyComponent,
-    SpringEditorComponent,
+    PhysicsEditorComponent,
     AnimationDemoComponent,
     AnimationOptionsComponent
   ],

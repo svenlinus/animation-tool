@@ -1,4 +1,4 @@
-import { Graph, Spline, SpringConfig } from '../curve.model';
+import { Graph, Spline, SpringConfig, GravityConfig } from '../curve.model';
 import { PercentFrame, TimeMapType } from '../animation.model';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point, Bezier } from '../geometry';
@@ -8,6 +8,7 @@ import { LinearSpline } from '../curves/LinearSpline';
 import { PolynomialSpline } from '../curves/PolynomialSpline';
 import { CustomGraph } from '../curves/CustomGraph';
 import * as p5 from 'p5';
+import { GravityGraph } from '../curves/GravityGraph';
 
 @Component({
   selector: 'app-animation-graph',
@@ -29,6 +30,9 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
         break;
       case TimeMapType.Spring:
         this.curve = new SpringGraph(this);
+        break;
+      case TimeMapType.Gravity:
+        this.curve = new GravityGraph(this);
         break;
       case TimeMapType.Linear:
         this.curve = new LinearSpline(this);
@@ -59,6 +63,7 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public mouseUp: boolean = false;
   public keys: Array<boolean> = [];
   public springConfig!: SpringConfig;
+  public gravityConfig!: GravityConfig;
   public inFocus: boolean = false;
   public compression: number = 0;
   public frames: Array<PercentFrame> = [];
@@ -171,6 +176,32 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   }
 
   private compressFrames() {
+    const extrema = [0];
+    let currentExtrema = 0;
+    let currentIndex = 0;
+
+    for (let i = 1; i < this.frames.length - 1; i ++) {
+      let past = this.frames[i - 1],
+          current = this.frames[i],
+          next = this.frames[i + 1];
+      let sbpc = this.slopeBetween(past, current),
+          sbcn = this.slopeBetween(current, next);
+      if (Math.sign(sbpc) != Math.sign(sbcn))
+        extrema.push(i);
+      current.insignificant = true;
+    }
+    extrema.push(this.frames.length - 1);
+
+    for (let i = 1; i < this.frames.length - 1; i ++) {
+      const distanceToExtrema = Math.abs(currentExtrema - i);
+      if (distanceToExtrema <= this.compression)
+        this.frames[i].insignificant = false;
+      if (i > currentExtrema + this.compression)
+        currentExtrema = extrema[++currentIndex];
+    }
+
+
+    return;
     for (let i = 1; i < this.frames.length - 1; i ++) {
       this.frames[i].insignificant = true;
     }
@@ -218,6 +249,11 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public updateSpringConfig(val: SpringConfig) {
     this.springConfig = val;
     (this.curve as SpringGraph).setConfig(val);
+  }
+
+  public updateGravityConfig(val: GravityConfig) {
+    this.gravityConfig = val;
+    (this.curve as GravityGraph).setConfig(val);
   }
 
   public setDisplay(val: boolean) {

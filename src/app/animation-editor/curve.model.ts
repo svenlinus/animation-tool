@@ -20,7 +20,15 @@ export interface SpringConfig extends Dict {
   initVelocity: number;
 }
 
-export interface SpringPoint {
+export interface GravityConfig extends Dict {
+  gravity: number;
+  drag: number;
+  elasticity: number;
+  bounces: number;
+  initVelocity: number;
+}
+
+export interface PhysicsPoint {
   p: number;
   v: number;
   a: number;

@@ -2,40 +2,44 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SpringConfig } from '../../curve.model';
 
 @Component({
-  selector: 'app-spring-editor',
-  templateUrl: './spring-editor.component.html',
-  styleUrls: ['./spring-editor.component.scss']
+  selector: 'app-physics-editor',
+  templateUrl: './physics-editor.component.html',
+  styleUrls: ['./physics-editor.component.scss']
 })
-export class SpringEditorComponent implements OnInit {
+export class PhysicsEditorComponent implements OnInit {
   
-  private _config!: SpringConfig;
+  private _config!: any;
 
   public configValues!: number[];
   public configKeys!: string[];
 
-  @Input() set config(val: SpringConfig) {
+  @Input() set config(val: any) {
     this._config = val;
     if (val) {
-      this.configValues = Object.values(this._config).slice(0, -1);
+      this.configValues = Object.values(this._config).slice(0, -1) as number[];
       this.configKeys = Object.keys(this._config).map(k => this.translation[k]);
     }
   }
-  get config(): SpringConfig {
+  get config(): any {
     return this._config;
   }
-  @Output() public change = new EventEmitter<SpringConfig>();
+  @Output() public change = new EventEmitter<any>();
 
   public translation: any = {
     'initVelocity': 'NaN',
     'stiffness': 'Stiffness',
-    'dampener': 'Dampener'
+    'dampener': 'Dampener',
+    'gravity': 'Gravity',
+    'drag': 'Drag',
+    'elasticity': 'Elasticity',
+    'bounces': 'Bounces',
   }
 
   constructor() { }
 
   ngOnInit(): void {
     if (this.config) {
-      this.configValues = Object.values(this.config).slice(0, -1);
+      this.configValues = Object.values(this.config).slice(0, -1) as number[];
       this.configKeys = Object.keys(this.config).map(k => this.translation[k]);
     }
   }
@@ -43,6 +47,7 @@ export class SpringEditorComponent implements OnInit {
   updateConfig(event: any, index: number) {
     const key: string = Object.keys(this._config)[index];
     this.config[key] = event.value;
+    console.log(this.config);
     this.change.emit(this.config);
   }
 
