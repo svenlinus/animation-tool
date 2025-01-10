@@ -5,7 +5,7 @@
 $my-primary: mat-palette($mat-blue, 800);
 $my-accent: mat-palette($mat-amber, 800);
 
-$my-theme: mat-light-theme($my-primary, $my-accent);
+$my-theme: mat-dark-theme($my-primary, $my-accent);
 
 @include angular-material-theme($my-theme);
 

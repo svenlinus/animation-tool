@@ -22,9 +22,9 @@ export enum TimeMapType {
   Bezier = 'Bezier',
   Spring = 'Spring',
   Gravity = 'Gravity',
+  Custom = 'Custom',
   Linear = 'Linear',
   Polynomial = 'Polynomial',
-  Custom = 'Custom',
 }
 
 export enum CssFunction {     // to be continued
@@ -84,8 +84,8 @@ export class AnimationProperty {
     }],
     ['translate', {
       units: ['px', 'vw', 'vh', '%', 'vmin', 'vmax', 'em', 'rem', 'cm'],
-      start: -100,
-      end: 0
+      start: 0,
+      end: 300
     }],
     ['rotate', {
       units: ['deg', 'rad', 'turn'],

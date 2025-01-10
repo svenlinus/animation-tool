@@ -146,12 +146,12 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
 
       const drawGrid = () => {
         s.strokeWeight(1);
-        s.stroke(255, 20);
+        s.stroke(255, 40);
         const padding = 150;  
         s.line(0, padding, s.width, padding);
         s.line(0, s.height - padding, s.width, s.height - padding);
         s.stroke(this.bgColor);
-        s.fill(255, 100);
+        s.fill(255, 120);
         s.textSize(15);
         s.text('1', 20, 150);
         s.text('0', 20, s.height-150);
@@ -244,6 +244,10 @@ export class AnimationGraphComponent implements OnInit, AfterViewInit {
   public updateGravityConfig(val: GravityConfig) {
     this.gravityConfig = val;
     (this.curve as GravityGraph).setConfig(val);
+  }
+
+  public updateCustomFunction(val: Function) {
+    (this.curve as CustomGraph).setFunction(val);
   }
 
   public setDisplay(val: boolean) {

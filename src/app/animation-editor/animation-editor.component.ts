@@ -55,13 +55,13 @@ export class AnimationEditorComponent implements OnInit {
     if (this.closedFunctionsList.length < this.cssFunctions.length) {
       const props = [this.cssFunctions.find(x => !this.closedFunctionsList.includes(x))];
       if (props[0]) this.closedFunctionsList.push(props[0]);
-      if (props[0] && props[0].includes('X')) {
-        const p2 = props[0].replace('X', 'Y');
-        if (!this.closedFunctionsList.includes(p2)) {
-          props.push(p2);
-          this.closedFunctionsList.push(p2);
-        }
-      }
+      // if (props[0] && props[0].includes('X')) {
+      //   const p2 = props[0].replace('X', 'Y');
+      //   if (!this.closedFunctionsList.includes(p2)) {
+      //     props.push(p2);
+      //     this.closedFunctionsList.push(p2);
+      //   }
+      // }
       this.filterOptions();
       this.defaultMap = {
         properties: props.map(prop => new AnimationProperty(<CssFunction>prop)),

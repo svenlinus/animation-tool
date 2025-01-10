@@ -1,16 +1,11 @@
 .container {
   padding: 0;
   width: 500px;
-  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
 
-  .script-input {
+  .ngs-code-editor {
     width: 100% !important;
-    
-    ::ng-deep {
-      .mat-form-field-flex {
-        background-color: var(--bgColor);
-      }
-    }
-    
+    --vscode-focusBorder: transparent !important;
   }
 }

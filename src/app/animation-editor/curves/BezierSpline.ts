@@ -117,7 +117,7 @@ export class BezierSpline implements Spline {
           if (comp.mouseUp) point.showMenu = false;
         }
 
-        s.stroke(255, 100);
+        s.stroke(255, 120);
         s.noFill();
         const p1 = point.worldToScreen();
         if ((i == 1 || i == bez.points.length-1) && ppoint) {
@@ -145,7 +145,7 @@ export class BezierSpline implements Spline {
       const p1 = b.min?.worldToScreen();
       const p2 = b.max?.worldToScreen();
       s.noFill();
-      s.stroke(255, 40);
+      s.stroke(255, 80);
       if (p1 && p2)
         s.rect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
     }
